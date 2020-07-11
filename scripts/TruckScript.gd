@@ -3,9 +3,9 @@ extends Node2D
 const maxVelocity = 100
 
 export var squareSize : int
-var movingDir = Vector2.ZERO
+var movingDir = Vector2.ZERO # Unit vector
 var velocity = 0
-var tilePos = Vector2.ZERO
+var tilePos = Vector2.ZERO # Position of the truck in tile grid coordinates
 var targetPos = null
 
 
@@ -41,7 +41,7 @@ func _process(delta):
 		var moveCost = controller.tileMoveCost(tilePos + movingDir)
 		
 		if moveCost == -1:
-			print("Can't move there")
+			prints("Can't move there", tilePos + movingDir)
 			movingDir = Vector2.ZERO
 		else:
 			targetPos = controller.tileToWorld(tilePos + movingDir)

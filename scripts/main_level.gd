@@ -1,18 +1,19 @@
 extends Node2D
 
 var cellSize = 32
-export var size: Vector2 = Vector2(50, 50) #The size of the game grid
+export var size: Vector2 = Vector2(10, 10) #The size of the game grid
 var tiles: Array = [] # 2d array, [y][x]
 onready var worldMap: TileMap = get_node("worldMap") #TileMap node which we are using to render
 onready var fireMap: TileMap = get_node("fireMap") #TileMap of the fire that will be drawn over the world
 onready var truck = get_node("Fire Truck")
 var fireSpreadTime = 1 #timeInSeconds
+var timeUntilNextFireSpread = fireSpreadTime
 
 # Returns -1 for non-traversable tiles and out of bounds positions
 # Otherwise, returns the movementCost of the tile at the given position
 # Param: pos - Vector2 - a position on the tile grid to be checked
 func tileMoveCost(pos):
-	if tileInbounds(pos): # are we out of the grid?
+	if !tileInbounds(pos): # are we out of the grid?
 		return -1
 	else:
 		return tiles[pos.y][pos.x].movementCost
@@ -61,7 +62,7 @@ func _ready():
 			var pos = Vector2(x,y)
 			var tile = getInternalTile(worldMap, pos, worldTileSetNameMap)
 			if fireMap.get_cellv(pos) != -1:
-				tile.fireLevel = 100 #todo set this to max
+				tile.fireLevel = 100 #--------------------------todo set this to max
 			row.append(tile)
 		tiles.append(row)
 	truck.customInit()
@@ -76,13 +77,27 @@ func fireSpread():
 			row.append(fireStats)
 			nextFireLevelsArr.append(row)
 	
+
+
 	for y in range(size.y):
 		for x in range(size.x):
+			tiles[y][x].fireLevel = nextFireLevelsArr[y][x][0]
+			tiles[y][x].fireResistance = nextFireLevelsArr[y][x][1]
 			
+func fireSpreadHelperSchemeOne(nextFireLevelsArr, y, x):
+	var fireResistance = tiles[y][x].fireResistance
+	var fireLevel = tiles[y][x].fireLevel
 
+func updateTiles():
+	pass
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	if timeUntilNextFireSpread <= 0:
+		fireSpread()
+		updateTiles()
+		timeUntilNextFireSpread = fireSpreadTime
+	else:
+		timeUntilNextFireSpread -= delta
 
 #func _physics_process(delta):
 #	pass
