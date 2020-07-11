@@ -1,8 +1,8 @@
 extends Node2D
 
 const maxVelocity = 100
-const max_water = 100
-const water_per_firing = 33
+const max_water = 100 # 100 for easy integration with UI
+const water_per_firing = 25 #noice and round
 export var water_amount = max_water
 signal water_changed(water_amount)
 
@@ -99,13 +99,14 @@ func on_left_clicked(event : InputEvent):
 
 # fires water on tile unless truck has ed
 func fire_waterCannon(tile):
-
-	if (water_amount <= 0):
-		# shoot dust, be sad
-		print("truck out of water")
+	var new_amount = water_amount - water_per_firing
+	
+	if (new_amount <= 0):
+		# shoot dust, be sad UwU
+		print("truck has insufficient water")
 	else:
 		tile.fireLevel -= 50 # make betterer
-		water_amount -= 1
+		water_amount = new_amount
 		emit_signal("water_changed", water_amount)
 
 func fill_water(tile):
