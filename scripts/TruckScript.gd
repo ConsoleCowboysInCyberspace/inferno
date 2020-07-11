@@ -19,6 +19,8 @@ func customInit():
 	# (e.g. if we're dropped in willy-nilly from the editor)
 	position = tile_manager.tileToWorld(tile_manager.worldToTile(position))
 	tilePos = tile_manager.worldToTile(position)
+	
+	emit_signal("water_changed", water_amount) #initialize UI
 
 	# func _input(event):
 # 	if event.is_action_pressed("fire_hose"):
@@ -101,7 +103,7 @@ func on_left_clicked(event : InputEvent):
 func fire_waterCannon(tile):
 	var new_amount = water_amount - water_per_firing
 	
-	if (new_amount <= 0):
+	if (new_amount < 0):
 		# shoot dust, be sad UwU
 		print("truck has insufficient water")
 	else:
