@@ -8,6 +8,7 @@ var velocity = 0
 var tilePos = Vector2.ZERO
 var targetPos = null
 
+
 onready var controller = get_parent()
 
 # Custom init that is called from the controller
@@ -40,10 +41,12 @@ func _process(delta):
 			movingDir = Vector2.ZERO
 		else:
 			targetPos = controller.tileToWorld(tilePos + movingDir)
+			velocity = 200/moveCost
 			
 	else:
-		position = position.move_toward(targetPos, 200 * delta)
+		position = position.move_toward(targetPos, velocity * delta)
 		if (position == targetPos):
 			tilePos = controller.worldToTile(position)
 			movingDir = Vector2.ZERO
 			targetPos = null
+			velocity = 0

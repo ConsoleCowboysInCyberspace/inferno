@@ -13,8 +13,8 @@ func tileMoveCost(pos):
 	if(pos.x >= size.x || pos.x < 0 || pos.y >= size.y || pos.y < 0): # are we out of the grid?
 		return -1
 	else:
-		return 1
-		#return tiles[pos.y][pos.x].movementCost
+		#return 1
+		return tiles[pos.y][pos.x].movementCost
 
 func tileInbounds(tilePos):
 	return worldMap.get_cellv(tilePos) != -1
@@ -30,7 +30,7 @@ func worldToTile(worldPos):
 # Constructs a new internal tile object matching the tile in gridMap at the given position
 func getInternalTile(tileMap, pos, nameMap):
 	var id = tileMap.get_cellv(pos)
-	assert(id != 0, "someone should really make sure that the map has no holes in it")
+	#assert(id != 0, "someone should really make sure that the map has no holes in it")
 	var tile = Internal_Tile.new(nameMap[id])
 	tile.pos = pos
 	return tile
