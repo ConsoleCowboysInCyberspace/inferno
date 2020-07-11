@@ -24,6 +24,10 @@ config/name="Inferno"
 run/main_scene="res://main_level.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+tile_manager="*res://scripts/internal_tile_manager.gd"
+
 [input]
 
 truck_up={
