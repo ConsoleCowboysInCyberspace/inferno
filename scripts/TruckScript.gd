@@ -1,8 +1,9 @@
 extends Node2D
 
 const maxVelocity = 100
-const max_water = 3
-export var water_amount = 3
+const max_water = 100
+const water_per_firing = 33
+export var water_amount = max_water
 signal water_changed(water_amount)
 
 export var squareSize : int
@@ -83,7 +84,7 @@ func on_left_clicked(event : InputEvent):
 	var tile = tile_manager.getTile(tile_coord)
 
 	# if tile is adjacent to truck
-	if (utils.manhattanDistance(tilePos, tile_coord)):
+	if (Utils.manhattanDistance(tilePos, tile_coord)):
 		
 		# put out fire on tile
 		fire_waterCannon(tile)
@@ -102,7 +103,6 @@ func fire_waterCannon(tile):
 	if (water_amount <= 0):
 		# shoot dust, be sad
 		print("truck out of water")
-	
 	else:
 		tile.fireLevel -= 50 # make betterer
 		water_amount -= 1

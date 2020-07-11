@@ -13,7 +13,7 @@ func _process(delta):
 		lastUpdateTime = now
 		
 		set_score(randi() % 10000)
-		set_water_level(randi() % 100)
+		# set_water_level(randi() % 100)
 		set_wind_angle(randi() % 360)
 		set_wind_speed(randi() % 100)
 
