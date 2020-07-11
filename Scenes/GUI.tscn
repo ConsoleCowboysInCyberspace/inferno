@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/anemometer.gd" type="Script" id=1]
+[ext_resource path="res://scripts/GUI.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -12,6 +13,7 @@ bg_color = Color( 0, 0.156863, 1, 1 )
 bg_color = Color( 0.270588, 0.270588, 0.270588, 1 )
 
 [node name="GUI" type="CanvasLayer"]
+script = ExtResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
@@ -47,7 +49,7 @@ margin_bottom = 15.0
 rect_min_size = Vector2( 100, 15 )
 color = Color( 0.270588, 0.270588, 0.270588, 1 )
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer2/ColorRect"]
+[node name="Score" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer2/ColorRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 bbcode_enabled = true
@@ -98,7 +100,7 @@ margin_bottom = 35.0
 size_flags_horizontal = 3
 custom_styles/separator = SubResource( 3 )
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="WindSpeed" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 861.0
 margin_right = 921.0
 margin_bottom = 35.0
@@ -116,7 +118,7 @@ margin_bottom = 35.0
 rect_min_size = Vector2( 10, 0 )
 custom_styles/separator = SubResource( 3 )
 
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Anemometer" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 939.0
 margin_right = 974.0
 margin_bottom = 35.0
