@@ -27,7 +27,7 @@ config/icon="res://icon.png"
 [autoload]
 
 tile_manager="*res://scripts/internal_tile_manager.gd"
-Utils="*res://scripts/utils.gd"
+Utils="*res://scripts/Utils.gd"
 
 [input]
 
