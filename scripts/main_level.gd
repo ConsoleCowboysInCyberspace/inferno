@@ -1,5 +1,6 @@
 extends Node2D
 
+var cellSize = 32
 export var size: Vector2 = Vector2(50, 50) #The size of the game grid
 var tiles: Array = [] # 2d array, [y][x]
 onready var worldMap: TileMap = get_node("worldMap") #TileMap node which we are using to render
@@ -19,8 +20,10 @@ func tileInbounds(tilePos):
 	return worldMap.get_cellv(tilePos) != -1
 
 func tileToWorld(tilePos):
-	return worldMap.map_to_world(tilePos)
-
+	var retCoord = worldMap.map_to_world(tilePos)
+	retCoord.x +=cellSize/2
+	retCoord.y +=cellSize/2
+	return retCoord
 func worldToTile(worldPos):
 	return worldMap.world_to_map(worldPos)
 
