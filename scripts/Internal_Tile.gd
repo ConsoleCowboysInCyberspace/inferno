@@ -9,9 +9,11 @@ var fireResistance: int
 var movementCost: int
 var type
 var nonFlamable = false
+var neighbors = []
 
 func _init(tileType):
 	fireLevel = 0
+	
 	match tileType:
 		"forest":
 			fireResistance = 0
@@ -34,6 +36,11 @@ func _init(tileType):
 			movementCost = 2
 			type = TileType.TRENCH
 			
+func burn(burnLevel):
+	if fireResistance > burnLevel:
+		return
+	else:
+		fireLevel += burnLevel - fireResistance
 
 
 
