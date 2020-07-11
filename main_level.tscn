@@ -24,6 +24,7 @@
 
 [node name="controller" type="Node2D"]
 script = ExtResource( 1 )
+size = null
 
 [node name="GUI" parent="." instance=ExtResource( 5 )]
 

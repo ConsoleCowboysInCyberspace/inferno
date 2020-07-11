@@ -8,18 +8,22 @@ onready var fireMap: TileMap = get_node("fireMap") #TileMap of the fire that wil
 onready var truck = get_node("Fire Truck")
 var fireSpreadTime = 1 #timeInSeconds
 var timeUntilNextFireSpread = fireSpreadTime
-
+var neighborVectors = [
+	Vector2(-1 , 1), Vector2(0 , 1),  Vector2(1 , 1),
+	Vector2(-1 , 0),  Vector2(0, 2)   Vector2(1 , 1), 
+	Vector2(-1 , -1), Vector2(0 , 1), Vector2(1 , -1)
+]
 # Returns -1 for non-traversable tiles and out of bounds positions
 # Otherwise, returns the movementCost of the tile at the given position
 # Param: pos - Vector2 - a position on the tile grid to be checked
 func tileMoveCost(pos):
-	if !tileInbounds(pos): # are we out of the grid?
+	if !tileInBounds(pos): # are we out of the grid?
 		return -1
 	else:
 		return tiles[pos.y][pos.x].movementCost
 
 
-func tileInbounds(tilePos):
+func tileInBounds(tilePos):
 	return worldMap.get_cellv(tilePos) != TileMap.INVALID_CELL
 
 # Returns the position of the tile in the grid that contains the given coordinates
@@ -37,6 +41,8 @@ func tileToWorld(tilePos):
 func worldToTile(worldPos):
 	return worldMap.world_to_map(worldPos)
 
+
+	
 # Constructs a new internal tile object matching the tile in gridMap at the given position
 func getInternalTile(tileMap, pos, nameMap):
 	var id = tileMap.get_cellv(pos)
@@ -44,7 +50,7 @@ func getInternalTile(tileMap, pos, nameMap):
 	var tile = Internal_Tile.new(nameMap[id])
 	tile.pos = pos
 	return tile
-			
+
 func generateTileIDMap(tileMap):
 	var tileIDArray = tileMap.tile_set.get_tiles_ids()
 	var tileNameMap = []
@@ -75,38 +81,47 @@ func digTrench(tilePos):
 
 func fireSpread():
 	
-	var nextFireLevelsArr = [] #2d arr
+	var burnLevelsArr = [] #2d arr
 	for y in range(size.y):
 		var row = []
 		for x in range(size.x):
-			var fireStats = [tiles[y][x].fireLevel, tiles[y][x].fireResistance]
+			var fireStats = tiles[y][x].fireLevel
 			row.append(fireStats)
-			nextFireLevelsArr.append(row)
+			burnLevelsArr.append(row)
 	
-
+	for y in range(size.y):
+		for x in range(size.x):
+			fireSpreadHelperSchemeOne(burnLevelsArr, Vector2(x, y))
 
 	for y in range(size.y):
 		for x in range(size.x):
-			tiles[y][x].fireLevel = nextFireLevelsArr[y][x][0]
-			tiles[y][x].fireResistance = nextFireLevelsArr[y][x][1]
+			tiles[y][x].fireLevel.burn(burnLevelsArr[y][x])
 			
-func fireSpreadHelperSchemeOne(nextFireLevelsArr, y, x):
-	var fireResistance = tiles[y][x].fireResistance
-	var fireLevel = tiles[y][x].fireLevel
+			
+func fireSpreadHelperSchemeOne(burnLevelsArr, pos):
+	var fireLevel = tiles[pos.y][pos.x].fireLevel
+	var neighbors = [] 
+
+	for potentialNeighbor in neighborVectors:
+		if tileInBounds(pos + potentialNeighbor):
+			neighbors.append(pos + potentialNeighbor)
+	
+	var tileToBurn = neighbors[rand_range(0, len(neighbors))]
+	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireLevel
+			
 
 func updateTiles():
 	pass
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	pass
+
+	
+func _physics_process(delta):
 	if timeUntilNextFireSpread <= 0:
 		fireSpread()
 		updateTiles()
 		timeUntilNextFireSpread = fireSpreadTime
 	else:
 		timeUntilNextFireSpread -= delta
-		
-	
-
-#func _physics_process(delta):
-#	pass

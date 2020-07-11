@@ -40,7 +40,10 @@ func _process(delta):
 				$Sprite.play("right")
 
 		#check move cost
-		var moveCost = controller.tileMoveCost(tilePos + movingDir)
+		# this line is to make movement speed based on origin tile instead of destination tile
+		var destination_cost = controller.tileMoveCost(tilePos + movingDir)
+		# the ternary is also there for the same reason; if we want to revert this, end the line before if and add a '+ movingDir' in the tileMoveCost
+		var moveCost = controller.tileMoveCost(tilePos) if destination_cost != -1 else -1
 		
 		if moveCost == -1:
 			prints("Can't move there", tilePos + movingDir)
@@ -56,3 +59,8 @@ func _process(delta):
 			movingDir = Vector2.ZERO
 			targetPos = null
 			velocity = 0
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT && event.pressed:
+			print("Mouse Click at: ", event.position, "    Tile coords: ", controller.worldToTile(event.position))
