@@ -22,7 +22,9 @@ func customInit():
 
 
 func _process(delta):
-
+	if Input.is_action_just_released("dig_trench"):
+		controller.digTrench(tilePos)
+	
 	if !targetPos:
 		if Input.is_action_pressed("truck_up"):
 				movingDir = Vector2.UP

@@ -73,6 +73,12 @@ func _ready():
 		tiles.append(row)
 	truck.customInit()
 
+# Checks if we can dig a trench at the given position in the tile grid
+# If we can, change the tile to a trench
+func digTrench(tilePos):
+	if tiles[tilePos.y][tilePos.x].type == Internal_Tile.TileType.FOREST:
+		tiles[tilePos.y][tilePos.x] = Internal_Tile.new("trench")
+
 func fireSpread():
 	
 	var burnLevelsArr = [] #2d arr
@@ -106,6 +112,7 @@ func fireSpreadHelperSchemeOne(burnLevelsArr, pos):
 
 func updateTiles():
 	pass
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
