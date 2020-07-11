@@ -26,12 +26,16 @@ func _process(delta):
 	if !targetPos:
 		if Input.is_action_pressed("truck_up"):
 				movingDir = Vector2.UP
+				$Sprite.play("up")
 		if Input.is_action_pressed("truck_down"):
 				movingDir = Vector2.DOWN
+				$Sprite.play("down")
 		if Input.is_action_pressed("truck_left"):
 				movingDir = Vector2.LEFT
+				$Sprite.play("left")
 		if Input.is_action_pressed("truck_right"):
 				movingDir = Vector2.RIGHT
+				$Sprite.play("right")
 
 		#check move cost
 		var moveCost = controller.tileMoveCost(tilePos + movingDir)

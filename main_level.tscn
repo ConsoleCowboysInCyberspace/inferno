@@ -41,5 +41,4 @@ format = 1
 tile_data = PoolIntArray( 0, 0, 0, 131072, 0, 0, 262144, 0, 0, 393216, 0, 0, 524288, 0, 0 )
 
 [node name="Fire Truck" parent="." instance=ExtResource( 3 )]
-position = Vector2( 81.8519, 79.6196 )
-scale = Vector2( 0.5, 0.5 )
+position = Vector2( 28.1633, 48.4717 )
