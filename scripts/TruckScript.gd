@@ -64,6 +64,7 @@ func _input(event):
 
 # Checks if we can dig a trench at the given position in the tile grid
 # If we can, change the tile to a trench
-# func digTrench():
-# 	if tile_manager.getTile == Internal_Tile.TileType.FOREST
-# 		tiles[tilePos.y][tilePos.x] = Internal_Tile.new("trench")
+func digTrench():
+	if tile_manager.getTile(tilePos) == Internal_Tile.TileType.FOREST:
+		tile_manager.setTile(tilePos, "trench")
+

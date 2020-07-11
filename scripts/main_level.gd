@@ -10,9 +10,9 @@ func _ready():
 	tile_manager.worldMap = worldMap
 	tile_manager.fireMap = fireMap
 	tile_manager.truck = truck
-	tile_manager.customInit(size)
-	
-	
+	tile_manager.levelRoot = self
+	tile_manager.size = size
+	tile_manager.customInit()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

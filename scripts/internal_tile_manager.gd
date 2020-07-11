@@ -1,12 +1,15 @@
 extends Node
 
 var worldMap : TileMap
+var fireMap : TileMap
+var truck
+var levelRoot
 var worldTileSetNameMap
 var tiles: Array = []
-var fireMap
-var fireParticles: Array = []
-var truck
+var fireTiles: Array = []
 var size: Vector2
+var fireParticleScene = preload("res://Scenes/Fire.tscn")
+var cellSize: Vector2
 
 var fireSpreadTime = 1 #timeInSeconds
 var timeUntilNextFireSpread = fireSpreadTime
@@ -20,7 +23,8 @@ func getTile(pos: Vector2):
 	return tiles[pos.y][pos.x]
 
 func setTile(pos: Vector2, type):
-	pass
+	tiles[pos.y][pos.x] = Internal_Tile.new(type)
+	worldMap.set_cellv(pos, worldTileSetNameMap)
 
 # Returns -1 for non-traversable tiles and out of bounds positions
 # Otherwise, returns the movementCost of the tile at the given position
@@ -30,7 +34,6 @@ func tileMoveCost(pos):
 		return -1
 	else:
 		return tiles[pos.y][pos.x].movementCost
-
 
 func tileInBounds(tilePos):
 	return worldMap.get_cellv(tilePos) != TileMap.INVALID_CELL
@@ -69,23 +72,34 @@ func generateTileIDMap(tileMap):
 		tileNameMap.append(tileMap.tile_set.tile_get_name(id))
 	return tileNameMap
 
-func customInit(size):
+func makeNewFireInstance(pos):
+	var newFire = fireParticleScene.instance()
+	newFire.set_name("fire" + str(pos.x) + ", " + str(pos.y))
+	levelRoot.add_child(newFire)
+	newFire.position = tileToWorld(pos)
+	return newFire
+
+func customInit():
 	worldTileSetNameMap = generateTileIDMap(worldMap)
-	self.size = size
+	fireMap.visible = false
 
 	for y in range(size.y):
 		var row = []
+		var fireRow = []
 		for x in range(size.x):
 			var pos = Vector2(x,y)
 			var tile = getInternalTile(worldMap, pos, worldTileSetNameMap)
+			var fire = null
 			if fireMap.get_cellv(pos) != -1:
 				tile.fireLevel = 100 #todo set this to max
+				fire = makeNewFireInstance(pos)
 			row.append(tile)
+			fireRow.append(fire)
 		tiles.append(row)
+		fireTiles.append(fireRow)
 	truck.customInit()
 
 func fireSpread():
-
 	var burnLevelsArr = [] #2d arr
 	for y in range(size.y):
 		var row = []
@@ -112,16 +126,20 @@ func fireSpreadHelperSchemeOne(burnLevelsArr, pos):
 			neighbors.append(pos + potentialNeighbor)
 	
 	var tileToBurn = neighbors[rand_range(0, len(neighbors))]
-	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireLevel
-			
-
-func updateTiles():
-	pass
+	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireLevel/10
 
 func _physics_process(delta):
 	if timeUntilNextFireSpread <= 0:
 		fireSpread()
-		updateTiles()
 		timeUntilNextFireSpread = fireSpreadTime
 	else:
 		timeUntilNextFireSpread -= delta
+
+func _process(delta):
+	for y in range(size.y):
+		for x in range(size.x):
+			var tile = tiles[y][x]
+			if tile.fireLevel > 0:
+				if !fireTiles[y][x]:
+					fireTiles[y][x] = makeNewFireInstance(Vector2(x,y))
+				fireTiles[y][x].get_process_material().scale = (tile.fireLevel/float(Internal_Tile.maxFireLevel)) * 2
