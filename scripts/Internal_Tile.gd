@@ -1,4 +1,4 @@
-extends Node
+extends Object
 class_name Internal_Tile
 
 enum TileType {TOWN, FOREST, WATER, ROAD, TRENCH}
@@ -10,9 +10,9 @@ var movementCost: int
 var type
 var nonFlamable = false
 
-func _init(type):
+func _init(tileType):
 	fireLevel = 0
-	match type:
+	match tileType:
 		"forest":
 			fireResistance = 0
 			movementCost = 2

@@ -10,10 +10,15 @@ var targetPos = null
 
 onready var controller = get_parent()
 
-# Called when the node enters the scene tree for the first time.
-func init():
+# Custom init that is called from the controller
+func customInit():
 	position = controller.tileToWorld(controller.worldToTile(position))
 	tilePos = controller.worldToTile(position)
+
+# func _input(event):
+# 	if event.is_action_pressed("fire_hose"):
+# 		var target = controller.worldToTile(event.position)
+
 
 func _process(delta):
 
@@ -26,13 +31,12 @@ func _process(delta):
 				movingDir = Vector2.LEFT
 		if Input.is_action_pressed("truck_right"):
 				movingDir = Vector2.RIGHT
-		
-		print(movingDir)
 
 		#check move cost
 		var moveCost = controller.tileMoveCost(tilePos + movingDir)
 		
 		if moveCost == -1:
+			print("Can't move there")
 			movingDir = Vector2.ZERO
 		else:
 			targetPos = controller.tileToWorld(tilePos + movingDir)
