@@ -24,7 +24,6 @@
 
 [node name="controller" type="Node2D"]
 script = ExtResource( 1 )
-size = null
 
 [node name="GUI" parent="." instance=ExtResource( 5 )]
 
@@ -39,7 +38,7 @@ tile_data = PoolIntArray( 0, 2, 0, 1, 2, 0, 2, 2, 0, 3, 2, 0, 4, 2, 0, 5, 2, 0, 
 tile_set = SubResource( 1 )
 cell_size = Vector2( 32, 32 )
 format = 1
-tile_data = PoolIntArray( 0, 0, 0, 131072, 0, 0, 262144, 0, 0, 393216, 0, 0, 524288, 0, 0 )
+tile_data = PoolIntArray( 0, 0, 0, 1, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 131072, 0, 0 )
 
 [node name="Fire Truck" parent="." instance=ExtResource( 3 )]
 position = Vector2( 81.8519, 79.6196 )

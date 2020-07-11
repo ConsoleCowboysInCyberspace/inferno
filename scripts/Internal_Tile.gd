@@ -17,15 +17,15 @@ func _init(tileType):
 	
 	match tileType:
 		"forest":
-			fireResistance = 5
+			fireResistance = 2
 			movementCost = 2
 			type = TileType.FOREST
 		"town":
-			fireResistance = 5
+			fireResistance = 2
 			movementCost = 1
 			type = TileType.TOWN
 		"water":
-			fireResistance = 5
+			fireResistance = -1
 			movementCost = -1 # tiles with negative movementCost can't be traversed
 			type = TileType.WATER
 		"road":
@@ -33,12 +33,17 @@ func _init(tileType):
 			movementCost = 1
 			type = TileType.ROAD
 		"trench":
-			fireResistance = 5
+			fireResistance = 7
 			movementCost = 2
 			type = TileType.TRENCH
 			
+func min(value):
+	return value if value >= 0 else 0
+
 func burn(burnLevel):
-	if fireResistance > burnLevel or fireLevel == maxFireLevel:
+	if fireResistance == -1:
+		return
+	elif fireResistance >= burnLevel || fireLevel == maxFireLevel:
 		return
 	
 	else:

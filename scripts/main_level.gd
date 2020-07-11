@@ -12,6 +12,7 @@ func _ready():
 	tile_manager.truck = truck
 	tile_manager.levelRoot = self
 	tile_manager.size = size
+	tile_manager.cellSize = 32
 	tile_manager.customInit()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.

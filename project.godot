@@ -27,6 +27,7 @@ config/icon="res://icon.png"
 [autoload]
 
 tile_manager="*res://scripts/internal_tile_manager.gd"
+Utils="*res://scripts/utils.gd"
 
 [input]
 
@@ -48,6 +49,11 @@ truck_left={
 truck_right={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
+ ]
+}
+dig_trench={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"unicode":0,"echo":false,"script":null)
  ]
 }
 
