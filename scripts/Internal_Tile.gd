@@ -7,8 +7,8 @@ var pos: Vector2
 var fireLevel: int = 0
 var fireResistance: int
 var movementCost: int
-var type: TileType
-var nonFlamable = False
+var type
+var nonFlamable = false
 
 func _init(type):
 	fireLevel = 0
@@ -16,23 +16,23 @@ func _init(type):
 		"forest":
 			fireResistance = 0
 			movementCost = 2
-			type = FOREST
+			type = TileType.FOREST
 		"town":
 			fireResistance = 0
 			movementCost = 1
-			type = TOWN
+			type = TileType.TOWN
 		"water":
 			fireResistance = 0
 			movementCost = -1 # tiles with negative movementCost can't be traversed
-			type = WATER
+			type = TileType.WATER
 		"road":
 			fireResistance = 0
 			movementCost = 1
-			type = ROAD
+			type = TileType.ROAD
 		"trench":
 			fireResistance = 0
 			movementCost = 2
-			type = TRENCH
+			type = TileType.TRENCH
 			
 
 
