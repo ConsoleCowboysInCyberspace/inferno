@@ -21,7 +21,7 @@ func _ready():
 			pos = Vector2(x,y)
 			tile = getInternalTile(worldMap, pos)
 			if worldMap.get_cellv(pos) != -1:
-				tile.fireLevel
+				tile.fireLevel = 100 #todo set this to max
 			row.append(tile)
 		tiles.append(row)
 
