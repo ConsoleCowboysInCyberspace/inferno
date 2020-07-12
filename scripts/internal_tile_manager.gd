@@ -233,8 +233,9 @@ func startWindFire():
 	for i in range(newFires):
 		fireTiles.append(Vector2(mostForwardCol + forwardDistance + Utils.randInt(0, 5), Utils.randInt(5, len(tiles) - 5)))
 	for pos in fireTiles:
-		tiles[pos.y][pos.x].fireLevel = Internal_Tile.maxFireLevel / 10
-		emit_signal("windFireStarted", pos)
+		if(tileInBounds(pos)):
+			tiles[pos.y][pos.x].fireLevel = Internal_Tile.maxFireLevel / 10
+			emit_signal("windFireStarted", pos)
 
 	windTimer.disconnect("timeout", self, "startWindFire")
 	windTimer.connect("timeout", self, "endWindFire")

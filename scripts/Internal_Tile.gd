@@ -76,7 +76,7 @@ func _init(tileType):
 			type = TileType.ROAD_TURN
 		"trench":
 			fireResistance = 15
-			movementCost = 2
+			movementCost = 1.5
 			type = TileType.TRENCH
 		"mountain":
 			fireResistance = 0
