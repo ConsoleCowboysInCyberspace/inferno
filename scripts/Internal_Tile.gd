@@ -28,7 +28,7 @@ func _init(tileType):
 			type = TileType.FOREST
 		"town":
 			fireResistance = 2
-			movementCost = 1
+			movementCost = -1
 			type = TileType.TOWN
 		"water":
 			fireResistance = -1

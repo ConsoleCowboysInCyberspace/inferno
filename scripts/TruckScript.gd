@@ -40,8 +40,8 @@ func _process(delta):
 	if Input.is_action_just_released("dig_trench"):
 		digTrench()
 	
-	if Input.is_mouse_button_pressed():
-		pass
+	#if Input.is_mouse_button_pressed():
+	#	pass
 	
 	if !targetPos:
 		if Input.is_action_pressed("truck_up"):
