@@ -33,7 +33,7 @@ func setTile(pos: Vector2, type):
 
 func burnTile(pos: Vector2, type):
 	match type:
-		"forest":
+		Internal_Tile.TileType.FOREST:
 			worldMap.set_cellv(pos, worldTileSetNameMap.find("burnedForest"))
 		"forestDry":
 			worldMap.set_cellv(pos, worldTileSetNameMap.find("burnedForest"))

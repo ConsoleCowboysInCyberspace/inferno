@@ -5,7 +5,7 @@ const max_water = 100 # 100 for easy integration with UI
 const water_per_firing = 2 #noice and round
 export var water_amount = max_water
 export var water_fill_rate = 50 # amount of water restored over a second
-export var waterCannonRange = 1
+export var waterCannonRange = 2
 
 const max_health = 100
 export var health = 100
@@ -113,9 +113,8 @@ func spin_fire_hose(target_pos):
 	fire_hose.rotation = position.angle_to_point(target_pos) + PI # something was rotated at some point
 
 func _physics_process(delta):
-	if fireButtonPressed:
-		var oneTile_vec = (lastMousePosition - position).normalized() * tile_manager.cellSize
-		try_fire_cannon(delta, oneTile_vec)
+	if fireButtonPressed: 
+		try_fire_cannon(delta, lastMousePosition)
 	
 	digTrench(delta)
 	
@@ -128,8 +127,6 @@ func _physics_process(delta):
 			velocity = 0
 
 func try_fire_cannon(delta, mousePosition):
-	# redundant calls
-	#print("Trying to fire cannon at: ", mousePosition, "    Tile coords: ", tile_manager.worldToTile(mousePosition))
 
 	var mousePosInTiles = tile_manager.worldToTile(mousePosition)
 
@@ -138,39 +135,39 @@ func try_fire_cannon(delta, mousePosition):
 		#print("tile not in bounds")
 		return
 
-	var tile = tile_manager.getTile(mousePosInTiles)
-	var distToClick = Utils.manhattanDistance(tilePos, mousePosInTiles)
-	print("disttoclick: ")
-	print(distToClick)
+	var vec_to_target = (mousePosition - position).normalized() * tile_manager.cellSize
+	var targetPos = position + vec_to_target
 
+	var tile = tile_manager.getTile(targetPos)
 	# if tile is adjacent to truck and is a well
-	if distToClick <= 1 && tile.type == Internal_Tile.TileType.WATER:
+	if tile.type == Internal_Tile.TileType.WATER:
 		fill_water(delta, tile)
-	else:
-		fireWaterCannon(delta, tile)
-		return
-
-# fires water on tile unless truck has ed
-func fireWaterCannon(delta, tile):
-	#print("firing water cannon at ", tile)
-	#print(water_amount)
-	#print(water_per_firing)
-	var new_amount = water_amount - water_per_firing * delta
-
-	if (new_amount < 0):
+	elif (water_amount <= 0):
 		# shoot dust, be sad UwU
-		#print("truck has insufficient water")
+		print("truck has insufficient water")
+		isWatering = false
 		isDusting = true
-		pass
 	else:
 		isWatering = true
-		tile.water()
-		print ("water cannon fired, tile watered: ")
-		print (tile.type)
-		print ("water amount: ")
-		print (new_amount)
+		waterTiles(vec_to_target)
+		var new_amount = water_amount - water_per_firing * delta
 		water_amount = new_amount
 		emit_signal("water_changed", water_amount)
+
+# fires water on tiles in sequence
+func waterTiles(toTarget):
+
+		# very hacky, just doubles vector and fires again
+
+		var tile
+		var target
+		for i in range(waterCannonRange):
+			target = position + toTarget
+			tile = tile_manager.getTile(target)
+			tile.water()
+			print ("water cannon fired, tile watered: ")
+			print (tile)
+		
 
 func fill_water(delta, tile):
 	#print("filling water")

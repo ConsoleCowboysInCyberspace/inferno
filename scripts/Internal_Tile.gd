@@ -1,7 +1,7 @@
 extends Object
 class_name Internal_Tile
 
-enum TileType {EMPTY, TOWN, FOREST, WATER, ROAD, TRENCH, DRYFOREST,MOUNTAIN, GRASS}
+enum TileType {EMPTY, TOWN, FOREST, WATER, ROAD, TRENCH, DRYFOREST,MOUNTAIN, GRASS, BLANK}
 const maxFireLevel = 400
 
 var pos: Vector2
@@ -12,6 +12,7 @@ var type
 var nonFlammable = false
 var neighbors = []
 var lowParticle = false
+var burnedDown = false
 
 func _init(tileType):
 	fireLevel = 0
@@ -21,6 +22,11 @@ func _init(tileType):
 			fireResistance = 0
 			movementCost = -1
 			type = TileType.EMPTY
+			nonFlammable = true
+		"blank":
+			fireResistance = 0
+			movementCost = -1
+			type = TileType.BLANK
 			nonFlammable = true
 		"forest":
 			fireResistance = 2
@@ -68,6 +74,7 @@ func _init(tileType):
 func water():
 	#fireLevel = clamp(fireLevel - 50, 0, maxFireLevel)
 	fireLevel = 0
+
 func burnDown():
 	fireResistance = 0
 	tile_manager.burnTile(pos, type)
@@ -79,7 +86,8 @@ func burn(burnLevel):
 	if fireResistance == -1 || nonFlammable:
 		return
 	fireLevel += clamp(clamp(burnLevel - fireResistance, 0, 100), 0, 100)
-	if(fireLevel > maxFireLevel/2):
+
+	if fireLevel > maxFireLevel/2 && !burnedDown:
 		burnDown()
 	
 
