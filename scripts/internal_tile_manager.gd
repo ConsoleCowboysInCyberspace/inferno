@@ -13,6 +13,7 @@ var fireParticleScene = preload("res://Scenes/Fire.tscn")
 var fireLowParticleScene = preload("res://Scenes/FireLow.tscn")
 var cellSize
 var windTimer
+var mostForwardCol = -1
 
 var fireSpreadTime = 1 #timeInSeconds
 var timeUntilNextFireSpread = fireSpreadTime
@@ -76,7 +77,7 @@ func customInit():
 			var tile = Utils.getInternalTile(worldMap, pos, worldTileSetNameMap)
 			var fire = null
 			if fireMap != null && fireMap.get_cellv(pos) != -1:
-				tile.fireLevel = 100 #todo set this to max
+				tile.fireLevel = Internal_Tile.maxFireLevel #todo set this to max
 				fire = makeNewFireInstance(pos)
 			row.append(tile)
 			fireRow.append(fire)
@@ -89,6 +90,9 @@ func customInit():
 	windTimer = Timer.new()
 	windTimer.connect("timeout", self, "windTimerTimeout")
 	add_child(windTimer)
+	windTimer.wait_time = Utils.randInt(10, 15)
+	print("next wind ", windTimer.wait_time)
+	windTimer.set_one_shot(false)
 	windTimer.start()
 
 func fireSpread():
@@ -147,13 +151,50 @@ func _process(delta):
 					fireTiles[y][x] = null
 
 func windTimerTimeout():
-	if rand_range(0, 100) != 1:
-		return
-	
-	var mostForwardCol = Utils.findForwardMostFullFireColumn(tiles)
+	mostForwardCol = Utils.findForwardMostFullFireColumn(tiles)
 	if mostForwardCol == -1:
+		print("no forward fire")
+		windTimer.wait_time = Utils.randInt(30, 50)
+		windTimer.start()
 		return
-	
-	
-	
-	
+
+	windTimer.stop()
+	windTimer.disconnect("timeout", self, "windTimerTimeout")
+	windTimer.connect("timeout", self, "startWindFire")
+	windTimer.wait_time = 7
+	windTimer.one_shot = true
+
+	#todo move wind
+	windEmbers.emitting = true
+	print("wind starting")
+
+	windTimer.start()
+
+
+func startWindFire():
+	windTimer.stop()
+	var newFires = Utils.randInt(1, 3)
+	var forwardDistance = Utils.randInt(10, 18)
+	print("mostfor ", mostForwardCol, "fordist ", forwardDistance)
+	var fireTiles = []
+	for i in range(newFires):
+		fireTiles.append(Vector2(mostForwardCol + forwardDistance + Utils.randInt(0, 5), Utils.randInt(5, len(tiles) - 5)))
+	for pos in fireTiles:
+		tiles[pos.y][pos.x].fireLevel = Internal_Tile.maxFireLevel
+		print("starting new fire at " + str(pos))
+
+	windTimer.disconnect("timeout", self, "startWindFire")
+	windTimer.connect("timeout", self, "endWindFire")
+	windTimer.wait_time = 1
+	windTimer.one_shot = true
+	windTimer.start()
+
+func endWindFire():
+	windEmbers.emitting = false
+	print("ending wind")
+	windTimer.disconnect("timeout", self, "endWindFire")
+	windTimer.connect("timeout", self, "windTimerTimeout")
+	windTimer.wait_time = Utils.randInt(30, 50)
+	print("next wind ", windTimer.wait_time)
+	windTimer.one_shot = false
+	windTimer.start()
