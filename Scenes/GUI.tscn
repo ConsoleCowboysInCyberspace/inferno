@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/anemometer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=2]
@@ -7,10 +7,13 @@
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0, 0.156863, 1, 1 )
+bg_color = Color( 1, 0.156863, 0, 1 )
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.270588, 0.270588, 0.270588, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0.156863, 1, 1 )
 
 [node name="GUI" type="CanvasLayer"]
 script = ExtResource( 2 )
@@ -71,7 +74,11 @@ margin_top = 535.0
 margin_right = 974.0
 margin_bottom = 570.0
 
-[node name="WaterBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 35.0
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_right = 100.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 100, 15 )
@@ -81,9 +88,36 @@ custom_styles/bg = SubResource( 3 )
 value = 50.0
 percent_visible = false
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/WaterBar"]
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/HealthBar"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 0.529785
+margin_bottom = 0.529785
+size_flags_horizontal = 3
+size_flags_vertical = 4
+bbcode_enabled = true
+bbcode_text = "[center]Health[/center]"
+text = "Health"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WaterBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 19.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 15 )
+size_flags_horizontal = 0
+custom_styles/fg = SubResource( 4 )
+custom_styles/bg = SubResource( 3 )
+value = 50.0
+percent_visible = false
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/WaterBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 0.529785
+margin_bottom = 0.529785
 size_flags_horizontal = 3
 size_flags_vertical = 4
 bbcode_enabled = true
