@@ -18,8 +18,8 @@ var mostForwardCol = -1
 var numTowns = 0
 var score = 0
 
-const fireSpreadStrength = 2 #constant multiplier for burn size
-const fireSpreadTime = 1 #timeInSeconds
+const fireSpreadStrength = 1 #constant multiplier for burn size
+const fireSpreadTime = .5 #timeInSeconds
 var timeUntilNextFireSpread = fireSpreadTime
 
 # Returns the tile object at the given grid position
@@ -35,18 +35,24 @@ func burnTile(pos: Vector2, type):
 	match type:
 		Internal_Tile.TileType.FOREST:
 			worldMap.set_cellv(pos, worldTileSetNameMap.find("burnedForest"))
-		"forestDry":
+		Internal_Tile.TileType.FOREST_DRY:
 			worldMap.set_cellv(pos, worldTileSetNameMap.find("burnedForest"))
-		"town":
+		Internal_Tile.TileType.TOWN:
 			worldMap.set_cellv(pos, worldTileSetNameMap.find("townBurned"))
-		"townSmall":
+		Internal_Tile.TileType.TOWN_SMALL:
 			worldMap.set_cellv(pos, worldTileSetNameMap.find("townBurnedSmall"))
-		"road":
-			pass
-		"grass":
-			pass
-			
-
+		Internal_Tile.TileType.GRASS:
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("grassBurned"))
+		Internal_Tile.TileType.ROAD:
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadBurned"))
+		Internal_Tile.TileType.ROAD_CROSS:
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadCrossBurned"))
+		Internal_Tile.TileType.ROAD_TURN:
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadTurnBurned"))	
+		Internal_Tile.TileType.ROAD_T:
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadTBurned"))
+		Internal_Tile.TileType.ROAD_END:
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadEndBurned"))
 
 func setTileSprite(pos, type):
 	worldMap.set_cellv(pos, worldTileSetNameMap.find(type))
@@ -158,13 +164,14 @@ func fireSpread():
 func setBurnLevel(burnLevelsArr, pos):
 	var fireLevel = getTile(pos).fireLevel
 	var neighbors = [] 
-
+	if getTile(pos).type == Internal_Tile.TileType.TRENCH && !getTile(pos).burnedDown:
+		return
 	for potentialNeighbor in Utils.mooreNeighbors:
 		if tileInBounds(pos + potentialNeighbor) && getTile(pos + potentialNeighbor).nonFlammable == false:
 			neighbors.append(pos + potentialNeighbor)
 	
 	var tileToBurn = neighbors[rand_range(0, len(neighbors))]
-	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireSpreadStrength * log(fireLevel)
+	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireSpreadStrength * sqrt(fireLevel)
 
 func _physics_process(delta):
 	if timeUntilNextFireSpread <= 0:
@@ -190,7 +197,8 @@ func _process(delta):
 func burnTown():
 	numTowns -= 1
 	if (numTowns <= 0):
-		print("haha fuckin loser git gud")
+		pass
+		#Loose()
 
 func windTimerTimeout():
 	mostForwardCol = Utils.findForwardMostFullFireColumn(tiles)

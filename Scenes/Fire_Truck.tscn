@@ -40,6 +40,7 @@ bg_color = Color( 0.231373, 0.231373, 0.231373, 1 )
 script = ExtResource( 1 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
+position = Vector2( -0.132431, 0 )
 frames = SubResource( 1 )
 animation = "right"
 
@@ -77,4 +78,5 @@ texture = ExtResource( 8 )
 
 [node name="water_emitter" parent="fire_hose" instance=ExtResource( 7 )]
 position = Vector2( 30.0339, -6.34049 )
+[connection signal="digAmountChanged" from="." to="Node2D/DigBar" method="onDigAmountChanged"]
 [connection signal="timeout" from="Node2D/DigBar/Timer" to="Node2D/DigBar" method="onTimerTimeout"]

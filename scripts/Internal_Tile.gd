@@ -1,18 +1,20 @@
 extends Object
 class_name Internal_Tile
 
-enum TileType {EMPTY, TOWN, FOREST, WATER, ROAD, TRENCH, DRYFOREST,MOUNTAIN, GRASS, BLANK}
+enum TileType {EMPTY, TOWN, TOWN_SMALL, FOREST, FOREST_DRY, WATER, ROAD, ROAD_T, ROAD_END, ROAD_TURN, ROAD_CROSS, TRENCH, DRYFOREST,MOUNTAIN, GRASS, BLANK}
 const maxFireLevel = 400
+const roadFireResist = 8
 
 var pos: Vector2
 var fireLevel: int = 0
 var fireResistance: int
-var movementCost: int = 1
+var movementCost: float  = 1
 var type
 var nonFlammable = false
 var neighbors = []
 var lowParticle = false
 var burnedDown = false
+var diggable = false
 
 func _init(tileType):
 	fireLevel = 0
@@ -23,35 +25,55 @@ func _init(tileType):
 			movementCost = -1
 			type = TileType.EMPTY
 			nonFlammable = true
+			
 		"blank":
 			fireResistance = 0
-			movementCost = -1
+			movementCost = 1
 			type = TileType.BLANK
 			nonFlammable = true
 		"forest":
-			fireResistance = 2
+			fireResistance = 4
 			movementCost = 2
 			type = TileType.FOREST
+			diggable = true
 		"forestDry":
 			fireResistance = 0
 			movementCost = 2
-			type = TileType.FOREST
+			type = TileType.FOREST_DRY
+			diggable = true
 		"town":
-			fireResistance = 2
+			fireResistance = 4
 			movementCost = -1
 			type = TileType.TOWN
+
 		"townSmall":
-			fireResistance = 2
+			fireResistance = 4
 			movementCost = -1
-			type = TileType.TOWN
+			type = TileType.TOWN_SMALL
 		"water":
 			fireResistance = 0
 			movementCost = -1 # tiles with negative movementCost can't be traversed
 			type = TileType.WATER
 		"road":
-			fireResistance = 5
+			fireResistance = roadFireResist
 			movementCost = 1
 			type = TileType.ROAD
+		"roadCross":
+			fireResistance = roadFireResist
+			movementCost = 1
+			type = TileType.ROAD_CROSS
+		"roadEnd":
+			fireResistance = roadFireResist
+			movementCost = 1
+			type = TileType.ROAD_END
+		"roadT":
+			fireResistance = roadFireResist
+			movementCost = 1
+			type = TileType.ROAD_T
+		"roadTurn":
+			fireResistance = roadFireResist
+			movementCost = 1
+			type = TileType.ROAD_TURN
 		"trench":
 			fireResistance = 15
 			movementCost = 2
@@ -62,9 +84,10 @@ func _init(tileType):
 			type = TileType.MOUNTAIN
 			nonFlammable = true
 		"grass":
-			fireResistance = 4
-			movementCost = 2
+			fireResistance = 6
+			movementCost = 1.5
 			type = TileType.GRASS
+			diggable = true
 		_:
 			assert(0, "you have fucked up, " + str(tileType))
 
@@ -77,9 +100,10 @@ func water():
 
 func burnDown():
 	fireResistance = 0
+	burnedDown = true
 	tile_manager.burnTile(pos, type)
-	if type == TileType.TOWN:
-		pass
+	if type == TileType.TOWN || type == TileType.TOWN_SMALL:
+		tile_manager.burnTown()
 		
 
 func burn(burnLevel):

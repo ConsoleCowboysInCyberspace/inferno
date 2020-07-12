@@ -157,7 +157,7 @@
 10/shape_one_way_margin = 0.0
 10/shapes = [  ]
 10/z_index = 0
-11/name = "road"
+11/name = "roadCross"
 11/texture = ExtResource( 1 )
 11/tex_offset = Vector2( 0, 0 )
 11/modulate = Color( 1, 1, 1, 1 )
@@ -171,7 +171,7 @@
 11/shape_one_way_margin = 0.0
 11/shapes = [  ]
 11/z_index = 0
-12/name = "road"
+12/name = "roadEnd"
 12/texture = ExtResource( 1 )
 12/tex_offset = Vector2( 0, 0 )
 12/modulate = Color( 1, 1, 1, 1 )
@@ -185,7 +185,7 @@
 12/shape_one_way_margin = 0.0
 12/shapes = [  ]
 12/z_index = 0
-13/name = "road"
+13/name = "roadTurn"
 13/texture = ExtResource( 1 )
 13/tex_offset = Vector2( 0, 0 )
 13/modulate = Color( 1, 1, 1, 1 )
@@ -199,7 +199,7 @@
 13/shape_one_way_margin = 0.0
 13/shapes = [  ]
 13/z_index = 0
-14/name = "road"
+14/name = "roadT"
 14/texture = ExtResource( 1 )
 14/tex_offset = Vector2( 0, 0 )
 14/modulate = Color( 1, 1, 1, 1 )
@@ -255,7 +255,7 @@
 17/shape_one_way_margin = 0.0
 17/shapes = [  ]
 17/z_index = 0
-18/name = "roadBurned"
+18/name = "roadCrossBurned"
 18/texture = ExtResource( 1 )
 18/tex_offset = Vector2( 0, 0 )
 18/modulate = Color( 1, 1, 1, 1 )
@@ -283,7 +283,7 @@
 19/shape_one_way_margin = 0.0
 19/shapes = [  ]
 19/z_index = 0
-20/name = "roadBurned"
+20/name = "roadEndBurned"
 20/texture = ExtResource( 1 )
 20/tex_offset = Vector2( 0, 0 )
 20/modulate = Color( 1, 1, 1, 1 )
@@ -297,7 +297,7 @@
 20/shape_one_way_margin = 0.0
 20/shapes = [  ]
 20/z_index = 0
-21/name = "roadBurned"
+21/name = "roadTurnBurned"
 21/texture = ExtResource( 1 )
 21/tex_offset = Vector2( 0, 0 )
 21/modulate = Color( 1, 1, 1, 1 )
@@ -311,7 +311,7 @@
 21/shape_one_way_margin = 0.0
 21/shapes = [  ]
 21/z_index = 0
-22/name = "roadBurned"
+22/name = "roadTBurned"
 22/texture = ExtResource( 1 )
 22/tex_offset = Vector2( 0, 0 )
 22/modulate = Color( 1, 1, 1, 1 )

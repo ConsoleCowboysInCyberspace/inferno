@@ -5,11 +5,12 @@ const max_water = 100 # 100 for easy integration with UI
 const water_per_firing = 2 #noice and round
 export var water_amount = max_water
 export var water_fill_rate = 50 # amount of water restored over a second
-export var waterCannonRange = 2
+export var waterCannonRange = 3
 
 const max_health = 100
 export var health = 100
 export var fire_damage_multiplier = 5
+signal healthAmountChanged(health)
 
 onready var fire_hose = $fire_hose
 onready var water_emitter = fire_hose.get_node("water_emitter")
@@ -107,6 +108,7 @@ func _process(delta):
 	# health
 
 	# check tile
+	
 
 func spin_fire_hose(target_pos):
 	var to_pos = target_pos - position
@@ -136,9 +138,11 @@ func try_fire_cannon(delta, mousePosition):
 		return
 
 	var vec_to_target = (mousePosition - position).normalized() * tile_manager.cellSize
-	var targetPos = position + vec_to_target
 
-	var tile = tile_manager.getTile(targetPos)
+	var targetPos = position + vec_to_target
+	var coord = tile_manager.worldToTile(targetPos)
+	var tile = tile_manager.getTile(coord)
+
 	# if tile is adjacent to truck and is a well
 	if tile.type == Internal_Tile.TileType.WATER:
 		fill_water(delta, tile)
@@ -149,24 +153,20 @@ func try_fire_cannon(delta, mousePosition):
 		isDusting = true
 	else:
 		isWatering = true
-		waterTiles(vec_to_target)
+		waterTiles(tile)
 		var new_amount = water_amount - water_per_firing * delta
 		water_amount = new_amount
 		emit_signal("water_changed", water_amount)
 
-# fires water on tiles in sequence
-func waterTiles(toTarget):
+# fires water on tiles in square around hose
+func waterTiles(tile):
 
-		# very hacky, just doubles vector and fires again
-
-		var tile
-		var target
-		for i in range(waterCannonRange):
-			target = position + toTarget
-			tile = tile_manager.getTile(target)
-			tile.water()
-			print ("water cannon fired, tile watered: ")
-			print (tile)
+	var coord : Vector2
+	var targetTile
+	for vec in Utils.mooreNeighbors:
+		coord = tile.pos + vec
+		targetTile = tile_manager.getTile(coord)
+		targetTile.water()
 		
 
 func fill_water(delta, tile):
@@ -179,7 +179,7 @@ func fill_water(delta, tile):
 # If we can, start digging
 func digTrench(delta):
 	if digPos == Vector2(-1, -1) and digButtonPressed:
-		if tile_manager.getTile(tilePos).type == Internal_Tile.TileType.FOREST:
+		if tile_manager.getTile(tilePos).diggable == true:
 			digPos = tilePos
 			digAmount = 0
 			emit_signal("digAmountChanged", digAmount)

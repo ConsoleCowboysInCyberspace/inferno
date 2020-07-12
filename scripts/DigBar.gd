@@ -3,10 +3,12 @@ extends ProgressBar
 onready var timer = $Timer
 
 func _ready():
+	#var truck = find_node("Fire_Truck")
+	#truck.connect("digAmountChanged", self, "onDigAmountChanged")
 	visible = false
 
 func onDigAmountChanged(newValue):
-	print("digamount ", newValue)
+	#print("digamount ", newValue)
 	
 	if newValue == 0:
 		visible = false
