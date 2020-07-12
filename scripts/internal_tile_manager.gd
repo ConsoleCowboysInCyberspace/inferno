@@ -14,6 +14,8 @@ const fireLowParticleScene = preload("res://Scenes/FireLow.tscn")
 var cellSize
 var windTimer
 var mostForwardCol = -1
+var numTowns = 0
+var score = 0
 
 const fireSpreadStrength = 2 #constant multiplier for burn size
 const fireSpreadTime = 1 #timeInSeconds
@@ -80,6 +82,8 @@ func customInit():
 			if fireMap != null && fireMap.get_cellv(pos) != -1:
 				tile.fireLevel = Internal_Tile.maxFireLevel #todo set this to max
 				fire = makeNewFireInstance(pos)
+			if(tile.name == "Town"):
+				numTowns += 1
 			row.append(tile)
 			fireRow.append(fire)
 		tiles.append(row)
@@ -148,6 +152,11 @@ func _process(delta):
 				if fireTiles[y][x]:
 					fireTiles[y][x].free()
 					fireTiles[y][x] = null
+
+func burnTown():
+	numTowns -= 1
+	if (numTowns <= 0):
+		print("haha fuckin loser git gud")
 
 func windTimerTimeout():
 	mostForwardCol = Utils.findForwardMostFullFireColumn(tiles)
