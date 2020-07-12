@@ -34,7 +34,7 @@ func tileMoveCost(pos: Vector2):
 		return tiles[pos.y][pos.x].movementCost
 
 func tileInBounds(tilePos):
-	return worldMap.get_cellv(tilePos) != TileMap.INVALID_CELL
+	return worldMap.get_used_rect().has_point(tilePos)
 
 # Returns the position of the tile in the grid that contains the given coordinates
 func tileToWorld(tilePos: Vector2) -> Vector2 :

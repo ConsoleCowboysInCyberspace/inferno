@@ -1,7 +1,7 @@
 extends Object
 class_name Internal_Tile
 
-enum TileType {TOWN, FOREST, WATER, ROAD, TRENCH}
+enum TileType {EMPTY, TOWN, FOREST, WATER, ROAD, TRENCH}
 const maxFireLevel = 100
 
 var pos: Vector2
@@ -17,6 +17,11 @@ func _init(tileType):
 	fireLevel = 0
 	
 	match tileType:
+		"":
+			fireResistance = 0
+			movementCost = -1
+			type = TileType.EMPTY
+			nonFlamable = true
 		"forest":
 			fireResistance = 2
 			movementCost = 2
@@ -42,7 +47,7 @@ func min(value):
 	return value if value >= 0 else 0
 
 func burn(burnLevel):
-	if fireResistance == -1:
+	if fireResistance == -1 || nonFlamable:
 		return
 	elif fireResistance >= burnLevel || fireLevel == maxFireLevel:
 		return
