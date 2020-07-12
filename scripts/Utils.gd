@@ -41,6 +41,8 @@ func manhattanDistance(posA : Vector2, posB : Vector2) -> int:
 func findForwardMostFullFireColumn(tiles):
 	var mostForwardColumn = -1
 
+	print("searching for good col")
+
 	for x in range(len(tiles[0]) - 1, -1, -1):
 		var full = true
 		for y in len(tiles):

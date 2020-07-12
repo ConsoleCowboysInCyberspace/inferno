@@ -39,6 +39,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 linear_accel = 25.0
 linear_accel_random = 0.2
+scale = 2.0
 scale_random = 0.5
 scale_curve = SubResource( 6 )
 color_ramp = SubResource( 4 )

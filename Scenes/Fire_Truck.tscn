@@ -1,22 +1,22 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/TruckScript.gd" type="Script" id=1]
-[ext_resource path="res://assets/truckUp.png" type="Texture" id=2]
-[ext_resource path="res://assets/truckRight.png" type="Texture" id=3]
-[ext_resource path="res://assets/truckLeft.png" type="Texture" id=4]
-[ext_resource path="res://assets/truckDown.png" type="Texture" id=5]
+[ext_resource path="res://assets/sprites/truck/truckforward.png" type="Texture" id=2]
+[ext_resource path="res://assets/sprites/truck/truckside.png" type="Texture" id=3]
 [ext_resource path="res://scripts/DigBar.gd" type="Script" id=6]
+[ext_resource path="res://Scenes/water.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/sprites/truck/truckhoseside.png" type="Texture" id=8]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 4 ) ],
+"frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "left",
+"name": "right",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "right",
+"name": "left",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 2 ) ],
@@ -24,7 +24,7 @@ animations = [ {
 "name": "up",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 5 ) ],
+"frames": [ ExtResource( 2 ) ],
 "loop": true,
 "name": "down",
 "speed": 5.0
@@ -67,5 +67,14 @@ __meta__ = {
 process_mode = 0
 wait_time = 0.1
 one_shot = true
-[connection signal="digAmountChanged" from="." to="Node2D/DigBar" method="onDigAmountChanged"]
+
+[node name="fire_hose" type="Node2D" parent="."]
+position = Vector2( -1.06067, -14.4957 )
+
+[node name="fireHose" type="Sprite" parent="fire_hose"]
+position = Vector2( 14.6832, 12.3473 )
+texture = ExtResource( 8 )
+
+[node name="water_emitter" parent="fire_hose" instance=ExtResource( 7 )]
+position = Vector2( 30.0339, -6.34049 )
 [connection signal="timeout" from="Node2D/DigBar/Timer" to="Node2D/DigBar" method="onTimerTimeout"]

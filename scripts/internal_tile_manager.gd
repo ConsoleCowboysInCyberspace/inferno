@@ -31,6 +31,23 @@ func setTile(pos: Vector2, type):
 	tiles[pos.y][pos.x] = Internal_Tile.new(type)
 	worldMap.set_cellv(pos, worldTileSetNameMap.find(type))
 
+func burnTile(pos: Vector2, type):
+	match type:
+		"forest":
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("burnedForest"))
+		"forestDry":
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("burnedForest"))
+		"town":
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("townBurned"))
+		"townSmall":
+			worldMap.set_cellv(pos, worldTileSetNameMap.find("townBurnedSmall"))
+		"road":
+			pass
+		"grass":
+			pass
+			
+
+
 func setTileSprite(pos, type):
 	worldMap.set_cellv(pos, worldTileSetNameMap.find(type))
 
@@ -87,7 +104,7 @@ func customInit():
 			if fireMap != null && fireMap.get_cellv(pos) != -1:
 				tile.fireLevel = Internal_Tile.maxFireLevel #todo set this to max
 				fire = makeNewFireInstance(pos)
-			if(tile.name == "Town"):
+			if(tile.type == Internal_Tile.TileType.EMPTY):
 				numTowns += 1
 			row.append(tile)
 			fireRow.append(fire)
@@ -101,14 +118,14 @@ func customInit():
 	windTimer.connect("timeout", self, "windTimerTimeout")
 	add_child(windTimer)
 	windTimer.process_mode = 0
-	windTimer.wait_time = Utils.randInt(10, 15)
+	windTimer.wait_time = 1 #Utils.randInt(10, 15)
 	windTimer.set_one_shot(false)
 	windTimer.start()
 	
 	scoreTimer = Timer.new()
 	scoreTimer.connect("scoreTick", self, "incScore")
 	add_child(scoreTimer)
-	scoreTimer.wait_time(5)
+	scoreTimer.wait_time = 5
 	scoreTimer.set_one_shot(false)
 	scoreTimer.start()
 
@@ -143,7 +160,7 @@ func setBurnLevel(burnLevelsArr, pos):
 	var neighbors = [] 
 
 	for potentialNeighbor in Utils.mooreNeighbors:
-		if tileInBounds(pos + potentialNeighbor):
+		if tileInBounds(pos + potentialNeighbor) && getTile(pos + potentialNeighbor).nonFlammable == false:
 			neighbors.append(pos + potentialNeighbor)
 	
 	var tileToBurn = neighbors[rand_range(0, len(neighbors))]
@@ -178,7 +195,7 @@ func burnTown():
 func windTimerTimeout():
 	mostForwardCol = Utils.findForwardMostFullFireColumn(tiles)
 	if mostForwardCol == -1:
-		windTimer.wait_time = Utils.randInt(30, 50)
+		print("not enough fire")
 		windTimer.start()
 		return
 
@@ -189,7 +206,7 @@ func windTimerTimeout():
 	windTimer.one_shot = true
 
 	#todo move wind
-	windEmbers.position.x = tileToWorld(Vector2(mostForwardCol, 0))
+	windEmbers.position.x = tileToWorld(Vector2(mostForwardCol, 0)).x
 	windEmbers.emitting = true
 	windTimer.start()
 

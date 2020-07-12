@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [sub_resource type="Gradient" id=1]
-colors = PoolColorArray( 0.472961, 0.880879, 0.960938, 1, 0.0862745, 0.294118, 1, 1 )
+colors = PoolColorArray( 0.472961, 0.880879, 0.960938, 1, 0.0935669, 0.230471, 0.855469, 1 )
 
 [sub_resource type="GradientTexture" id=2]
 gradient = SubResource( 1 )
@@ -22,13 +22,14 @@ angular_velocity = 350.0
 angular_velocity_random = 0.9
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-linear_accel = 50.0
-scale = 4.0
+linear_accel = 200.0
+scale = 7.0
 scale_random = 0.9
 scale_curve = SubResource( 4 )
 color_ramp = SubResource( 2 )
 
 [node name="Particles2D" type="Particles2D"]
-amount = 100
-lifetime = 1.5
+position = Vector2( 0.471939, 0 )
+amount = 300
+local_coords = false
 process_material = SubResource( 5 )

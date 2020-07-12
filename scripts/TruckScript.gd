@@ -7,8 +7,12 @@ export var water_amount = max_water
 export var water_fill_rate = 50 # amount of water restored over a second
 export var waterCannonRange = 1
 
-onready var fire_hose = Node2D.new() # temp TODO replace with $fire_hose
-onready var water_particle_emitter = Particles2D.new() # temp TODO replace
+const max_health = 100
+export var health = 100
+export var fire_damage_multiplier = 5
+
+onready var fire_hose = $fire_hose
+onready var water_emitter = fire_hose.get_node("water_emitter")
  
 signal water_changed(water_amount)
 var watering_timer : Timer
@@ -45,14 +49,22 @@ func _ready():
 
 var fireButtonPressed: bool = false
 var digButtonPressed: bool = false
+var isWatering: bool = false
+var isDusting: bool = false
 func _process(delta):
-	if not digButtonPressed:
+
+	# input handling ===============================================
+
+	if !digButtonPressed:
 		digButtonPressed = Input.is_action_just_pressed("dig_trench")
 	
-	if Input.is_mouse_button_pressed(BUTTON_LEFT):
-		lastMousePosition = get_global_mouse_position()		
+	lastMousePosition = get_global_mouse_position()
+	if Input.is_action_just_pressed("left_click"):
 		fireButtonPressed = true
-		spin_fire_hose(lastMousePosition)
+	if Input.is_action_just_released("left_click"):
+		fireButtonPressed = false
+		isWatering = false
+		isDusting = false
 	
 	if !targetPos:
 		if Input.is_action_pressed("truck_up"):
@@ -80,14 +92,29 @@ func _process(delta):
 			else:
 				targetPos = tile_manager.tileToWorld(tilePos + movingDir)
 				velocity = maxVelocity/moveCost
+	
+	# truck systems ===============================================================================
+	
+	# helicopter
+	spin_fire_hose(lastMousePosition)
+	
+	# pee on command
+	if isWatering:
+		water_emitter.emitting = true
+	else:
+		water_emitter.emitting = false
+	
+	# health
+
+	# check tile
 
 func spin_fire_hose(target_pos):
 	var to_pos = target_pos - position
-	fire_hose.rotation = position.angle_to_point(target_pos)
+	fire_hose.rotation = position.angle_to_point(target_pos) + PI # something was rotated at some point
 
 func _physics_process(delta):
 	if fireButtonPressed:
-		var oneTile_vec = (lastMousePosition - position).normalized() * Internal_Tile.cellSize
+		var oneTile_vec = (lastMousePosition - position).normalized() * tile_manager.cellSize
 		try_fire_cannon(delta, oneTile_vec)
 	
 	digTrench(delta)
@@ -113,13 +140,14 @@ func try_fire_cannon(delta, mousePosition):
 
 	var tile = tile_manager.getTile(mousePosInTiles)
 	var distToClick = Utils.manhattanDistance(tilePos, mousePosInTiles)
+	print("disttoclick: ")
+	print(distToClick)
 
 	# if tile is adjacent to truck and is a well
 	if distToClick <= 1 && tile.type == Internal_Tile.TileType.WATER:
 		fill_water(delta, tile)
-	elif distToClick <= waterCannonRange:
-		fireWaterCannon(delta, tile)
 	else:
+		fireWaterCannon(delta, tile)
 		return
 
 # fires water on tile unless truck has ed
@@ -128,13 +156,19 @@ func fireWaterCannon(delta, tile):
 	#print(water_amount)
 	#print(water_per_firing)
 	var new_amount = water_amount - water_per_firing * delta
-	
+
 	if (new_amount < 0):
 		# shoot dust, be sad UwU
 		#print("truck has insufficient water")
+		isDusting = true
 		pass
 	else:
+		isWatering = true
 		tile.water()
+		print ("water cannon fired, tile watered: ")
+		print (tile.type)
+		print ("water amount: ")
+		print (new_amount)
 		water_amount = new_amount
 		emit_signal("water_changed", water_amount)
 
