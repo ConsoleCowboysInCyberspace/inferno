@@ -5,17 +5,28 @@ onready var healthBar = find_node("HealthBar")
 onready var waterBar = find_node("WaterBar")
 onready var anemometer = find_node("Anemometer")
 
+# fire arrow
+export var arrow_visible_time = 5
 onready var newFireArrow = find_node("NewFireArrow") # TODO
+onready var fireArrowSprite = newFireArrow.get_node("Sprite")
+onready var arrowTimer = Timer.new()
 var arrowTarget : Vector2
 
 func _ready():
+
+	# setting up fire arrow
 	tile_manager.connect("windFireStarted", self, "new_fire_started")
+	arrowTimer.connect("timeout", self, "arrowTimerTimeout")
+	arrowTimer.one_shot = true
 
 # temp debug code
 var lastUpdateTime = 0
 func _process(delta):
 
 	# not debug code
+	# rotate arrow to face target
+	var toTarget = arrowTarget - newFireArrow.position
+	newFireArrow.rotation = newFireArrow.position.angle_to_point(arrowTarget)
 
 	var now = OS.get_ticks_msec() / 1000
 	
@@ -43,4 +54,9 @@ func set_wind_speed(value):
 	anemometer.windSpeed = value
 
 func new_fire_started(pos):
-	pass
+	arrowTarget = pos
+	fireArrowSprite.visible = true
+	arrowTimer.start(arrow_visible_time)
+
+func arrowTimerTimeout():
+	fireArrowSprite.visible = false

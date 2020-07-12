@@ -9,8 +9,9 @@ export var waterCannonRange = 3
 
 const max_health = 100
 export var health = 100
-export var fire_damage_multiplier = 5
+export var fire_damage_multiplier = 0.15
 signal healthAmountChanged(health)
+signal noHealth()
 
 onready var fire_hose = $fire_hose
 onready var water_emitter = fire_hose.get_node("water_emitter")
@@ -113,6 +114,8 @@ func _process(delta):
 	if currentTile.fireLevel >= 0:
 		health = health - currentTile.fireLevel * fire_damage_multiplier * delta
 		emit_signal("healthAmountChanged", health)
+		if health <= 0:
+			emit_signal("noHealth")
 	
 
 func _physics_process(delta):

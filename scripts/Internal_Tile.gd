@@ -89,7 +89,8 @@ func _init(tileType):
 			type = TileType.GRASS
 			diggable = true
 		_:
-			assert(0, "you have fucked up, " + str(tileType))
+			print("warning: bad type for: " + str(tileType))
+			#assert(0, "you have fucked up, " + str(tileType))
 
 
 
