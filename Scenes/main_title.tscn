@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/main_level.gd" type="Script" id=1]
 [ext_resource path="res://assets/worldTiles64.tres" type="TileSet" id=2]
 [ext_resource path="res://assets/Startgame.png" type="Texture" id=3]
 [ext_resource path="res://assets/fire.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/Embers.tscn" type="PackedScene" id=5]
 
 [sub_resource type="TileSet" id=1]
 0/name = "fire"
@@ -57,4 +58,7 @@ expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Particles2D" parent="." instance=ExtResource( 5 )]
+position = Vector2( -6.34961, 815.924 )
 [connection signal="pressed" from="UIRoot/StartGameButton" to="." method="_on_StartGameButton_pressed"]

@@ -17,10 +17,11 @@ var scoreTimer
 var mostForwardCol = -1
 var numTowns = 0
 var score = 0
-signal windFire(pos)
+signal windFireStarted(pos)
 
-const fireSpreadStrength = .75 #constant multiplier for burn size
-const fireSpreadTime = 2 #timeInSeconds
+const fireSpreadStrength = .8 #constant multiplier for burn size
+const fireSpreadTime = 1.5 #timeInSeconds
+const fireGrowthMultiplier = .1
 var timeUntilNextFireSpread = fireSpreadTime
 
 # Returns the tile object at the given grid position
@@ -125,7 +126,7 @@ func customInit():
 	windTimer.connect("timeout", self, "windTimerTimeout")
 	add_child(windTimer)
 	windTimer.process_mode = 0
-	windTimer.wait_time = 1 #Utils.randInt(10, 15)
+	windTimer.wait_time = Utils.randInt(15, 20)
 	windTimer.set_one_shot(false)
 	windTimer.start()
 	
@@ -160,6 +161,7 @@ func fireSpread():
 		for x in range(size.x):
 			#print("burned tile " + str(x) + ", " + str(y) + "for value " + str(burnLevelsArr[y][x]))
 			getTile(Vector2(x,y)).burn(burnLevelsArr[y][x])
+			getTile(Vector2(x,y)).burnSelf(fireGrowthMultiplier)
 			
 			
 func setBurnLevel(burnLevelsArr, pos):
@@ -168,7 +170,7 @@ func setBurnLevel(burnLevelsArr, pos):
 	if getTile(pos).type == Internal_Tile.TileType.TRENCH && !getTile(pos).burnedDown:
 		return
 	for potentialNeighbor in Utils.mooreNeighbors:
-		if tileInBounds(pos + potentialNeighbor) && getTile(pos + potentialNeighbor).nonFlammable == false:
+		if tileInBounds(pos + potentialNeighbor) && getTile(pos + potentialNeighbor).nonFlammable == false and potentialNeighbor != Vector2.ZERO:
 			neighbors.append(pos + potentialNeighbor)
 	
 	var tileToBurn = neighbors[rand_range(0, len(neighbors))]
@@ -228,6 +230,7 @@ func startWindFire():
 		fireTiles.append(Vector2(mostForwardCol + forwardDistance + Utils.randInt(0, 5), Utils.randInt(5, len(tiles) - 5)))
 	for pos in fireTiles:
 		tiles[pos.y][pos.x].fireLevel = Internal_Tile.maxFireLevel / 10
+		emit_signal("windFireStarted", pos)
 
 	windTimer.disconnect("timeout", self, "startWindFire")
 	windTimer.connect("timeout", self, "endWindFire")
@@ -239,6 +242,14 @@ func endWindFire():
 	windEmbers.emitting = false
 	windTimer.disconnect("timeout", self, "endWindFire")
 	windTimer.connect("timeout", self, "windTimerTimeout")
-	windTimer.wait_time = Utils.randInt(20, 30)
+	windTimer.wait_time = Utils.randInt(25, 36)
 	windTimer.one_shot = false
 	windTimer.start()
+
+func nukeItFromOrbit():
+	for y in range(size.y):
+		for x in range(size.x):
+			tiles[y][x].free()
+			tiles[y][x] = null
+		tiles[y].resize(0)
+	tiles.resize(0)

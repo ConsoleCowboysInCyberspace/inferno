@@ -3,10 +3,10 @@ class_name Internal_Tile
 
 enum TileType {EMPTY, TOWN, TOWN_SMALL, FOREST, FOREST_DRY, WATER, ROAD, ROAD_T, ROAD_END, ROAD_TURN, ROAD_CROSS, TRENCH, DRYFOREST,MOUNTAIN, GRASS, BLANK}
 const maxFireLevel = 400
-const roadFireResist = 8
+const roadFireResist = 10
 
 var pos: Vector2
-var fireLevel: int = 0
+var fireLevel: float = 0
 var fireResistance: int
 var movementCost: float  = 1
 var type
@@ -84,7 +84,7 @@ func _init(tileType):
 			type = TileType.MOUNTAIN
 			nonFlammable = true
 		"grass":
-			fireResistance = 5
+			fireResistance = 8
 			movementCost = 1.5
 			type = TileType.GRASS
 			diggable = true
@@ -95,8 +95,8 @@ func _init(tileType):
 
 	
 func water():
-	#fireLevel = clamp(fireLevel - 50, 0, maxFireLevel)
-	fireLevel = 0
+	fireLevel = clamp(fireLevel - 1, 0, maxFireLevel)
+	
 
 func burnDown():
 	fireResistance = 0
@@ -113,5 +113,10 @@ func burn(burnLevel):
 
 	if fireLevel > maxFireLevel/2 && !burnedDown:
 		burnDown()
+
+func burnSelf(strengthMultiplier):
+	if type == TileType.TRENCH:
+		return
+	fireLevel += strengthMultiplier * fireLevel
 	
 

@@ -112,7 +112,7 @@ func _process(delta):
 	# damage if in fire
 	if currentTile.fireLevel >= 0:
 		health = health - currentTile.fireLevel * fire_damage_multiplier * delta
-		emit_signal("onHealthChanged", health)
+		emit_signal("healthAmountChanged", health)
 	
 
 func _physics_process(delta):

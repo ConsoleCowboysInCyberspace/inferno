@@ -5,9 +5,18 @@ onready var healthBar = find_node("HealthBar")
 onready var waterBar = find_node("WaterBar")
 onready var anemometer = find_node("Anemometer")
 
+onready var newFireArrow = find_node("NewFireArrow") # TODO
+var arrowTarget : Vector2
+
+func _ready():
+	tile_manager.connect("windFireStarted", self, "new_fire_started")
+
 # temp debug code
 var lastUpdateTime = 0
 func _process(delta):
+
+	# not debug code
+
 	var now = OS.get_ticks_msec() / 1000
 	
 	if now - lastUpdateTime > 1:
@@ -32,3 +41,6 @@ func set_wind_angle(value):
 
 func set_wind_speed(value):
 	anemometer.windSpeed = value
+
+func new_fire_started(pos):
+	pass
