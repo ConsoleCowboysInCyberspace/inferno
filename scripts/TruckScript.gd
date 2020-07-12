@@ -145,6 +145,7 @@ func digTrench(delta):
 	if digPos == Vector2(-1, -1):
 		if tile_manager.getTile(tilePos).type == Internal_Tile.TileType.FOREST:
 			digPos = tilePos
+			digAmount = 0
 	elif digPos != tilePos: # moved since started digging
 		digPos = Vector2(-1, -1)
 		digAmount = 0
