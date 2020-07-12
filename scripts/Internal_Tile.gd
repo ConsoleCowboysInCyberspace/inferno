@@ -31,7 +31,7 @@ func _init(tileType):
 			movementCost = -1
 			type = TileType.TOWN
 		"water":
-			fireResistance = -1
+			fireResistance = 0
 			movementCost = -1 # tiles with negative movementCost can't be traversed
 			type = TileType.WATER
 		"road":
@@ -51,7 +51,6 @@ func burn(burnLevel):
 		return
 	elif fireResistance >= burnLevel || fireLevel == maxFireLevel:
 		return
-	
 	else:
 		fireLevel += burnLevel - fireResistance
 		if fireLevel > maxFireLevel:

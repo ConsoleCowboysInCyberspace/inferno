@@ -3,6 +3,8 @@ extends Node
 export var wind_speed = 0
 export var wind_angle = 0
 
+export var wind_angle_coefficient = 45 # angle will be +- this many degrees
+
 signal wind_speed_changed(wind_speed)
 signal wind_angle_changed(wind_angle)
 
@@ -38,12 +40,10 @@ func _physics_process(delta):
 		speed_time += speed_step
 		
 		emit_signal("wind_speed_changed", wind_speed)
-		print("speed", wind_speed)
 	
 	if now - last_angle > angle_delay:
 		last_angle = now
-		wind_angle = 360 * angle_noise.get_noise_1d(angle_time)
+		wind_angle = 45 * angle_noise.get_noise_1d(angle_time)
 		angle_time += angle_step
 		
 		emit_signal("wind_angle_changed", wind_angle)
-		print("angle", wind_angle)

@@ -37,7 +37,7 @@ func setup_water():
 	watering_timer
 
 func _process(delta):
-	if Input.is_action_just_released("dig_trench"):
+	if Input.is_action_just_pressed("dig_trench"):
 		digTrench()
 	
 	#if Input.is_mouse_button_pressed():
@@ -56,19 +56,20 @@ func _process(delta):
 		if Input.is_action_pressed("truck_right"):
 				movingDir = Vector2.RIGHT
 				$Sprite.play("right")
-
-		#check move cost
-		# this line is to make movement speed based on origin tile instead of destination tile
-		var destination_cost = tile_manager.tileMoveCost(tilePos + movingDir)
-		# the ternary is also there for the same reason; if we want to revert this, end the line before if and add a '+ movingDir' in the tileMoveCost
-		var moveCost = tile_manager.tileMoveCost(tilePos) if destination_cost != -1 else -1
 		
-		if moveCost == -1:
-			print("Can't move there", tilePos + movingDir)
-			movingDir = Vector2.ZERO
-		else:
-			targetPos = tile_manager.tileToWorld(tilePos + movingDir)
-			velocity = 200/moveCost
+		if movingDir != Vector2.ZERO:
+			#check move cost
+			# this line is to make movement speed based on origin tile instead of destination tile
+			var destination_cost = tile_manager.tileMoveCost(tilePos + movingDir)
+			# the ternary is also there for the same reason; if we want to revert this, end the line before if and add a '+ movingDir' in the tileMoveCost
+			var moveCost = tile_manager.tileMoveCost(tilePos) if destination_cost != -1 else -1
+			
+			if moveCost == -1:
+				print("Can't move there", tilePos + movingDir)
+				movingDir = Vector2.ZERO
+			else:
+				targetPos = tile_manager.tileToWorld(tilePos + movingDir)
+				velocity = 200/moveCost
 			
 	else:
 		position = position.move_toward(targetPos, velocity * delta)

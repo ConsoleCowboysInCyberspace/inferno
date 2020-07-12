@@ -36,3 +36,18 @@ func generateTileIDMap(tileMap):
 # Manhattan distance from posA to posB
 func manhattanDistance(posA : Vector2, posB : Vector2) -> int:
 	return int(abs(posB.x - posA.x) + abs(posB.y - posA.y))
+
+#looks through internal tiles for rightmost column that has full fire level
+func findForwardMostFullFireColumn(tiles):
+	var mostForwardColumn = -1
+
+	for x in len(tiles):
+		var full = true
+		for y in len(tiles[0]):
+			if tiles[y][x].fireLevel != Internal_Tile.maxFireLevel:
+				full = false
+				break
+		if full:
+			mostForwardColumn = x
+			break
+	return mostForwardColumn

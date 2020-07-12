@@ -85,6 +85,11 @@ func customInit():
 	
 	if truck != null:
 		truck.customInit()
+	
+	windTimer = Timer.new()
+	windTimer.connect("timeout", self, "windTimerTimeout")
+	add_child(windTimer)
+	windTimer.start()
 
 func fireSpread():
 	var burnLevelsArr = [] #2d arr
@@ -113,7 +118,7 @@ func fireSpreadHelperSchemeOne(burnLevelsArr, pos):
 			neighbors.append(pos + potentialNeighbor)
 	
 	var tileToBurn = neighbors[rand_range(0, len(neighbors))]
-	burnLevelsArr[tileToBurn.y][tileToBurn.x] += 2 * log(fireLevel)
+	burnLevelsArr[tileToBurn.y][tileToBurn.x] += 5 * log(fireLevel)
 
 func _physics_process(delta):
 	if timeUntilNextFireSpread <= 0:
@@ -126,10 +131,10 @@ func _process(delta):
 	for y in range(size.y):
 		for x in range(size.x):
 			var tile = tiles[y][x]
-			if tile.fireLevel == Internal_Tile.maxFireLevel && !tile.lowParticle:
-				tile.lowParticle = true
-				fireTiles[y][x].free()
-				fireTiles[y][x] = makeNewLowFireInstance(Vector2(x,y))
+			#if tile.fireLevel == Internal_Tile.maxFireLevel && !tile.lowParticle:
+			#	tile.lowParticle = true
+			#	fireTiles[y][x].free()
+			#	fireTiles[y][x] = makeNewLowFireInstance(Vector2(x,y))
 			if tile.fireLevel > 0:
 				if !fireTiles[y][x]:
 					fireTiles[y][x] = makeNewFireInstance(Vector2(x,y))
@@ -140,3 +145,15 @@ func _process(delta):
 				if fireTiles[y][x]:
 					fireTiles[y][x].free()
 					fireTiles[y][x] = null
+
+func windTimerTimeout():
+	if rand_range(0, 100) != 1:
+		return
+	
+	var mostForwardCol = Utils.findForwardMostFullFireColumn(tiles)
+	if mostForwardCol == -1:
+		return
+	
+	
+	
+	
