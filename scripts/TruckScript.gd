@@ -17,7 +17,7 @@ var velocity = 0
 var tilePos = Vector2.ZERO # Position of the truck in tile grid coordinates
 var targetPos = null
 # var digTimer : Timer
-var digPos : Vector2 = null
+var digPos : Vector2 = Vector2(-1, -1)
 var digAmount: float = 0 setget _setDigAmount
 signal digAmountChanged(digAmount)
 
@@ -35,10 +35,10 @@ func customInit():
 	emit_signal("water_changed", water_amount) #initialize UI
 
 func _ready():
-	digTimer = Timer.new()
+	""" digTimer = Timer.new()
 	digTimer.connect("timeout", self, "_on_digTimer_timeout")
 	digTimer.one_shot = true
-	add_child(digTimer)
+	add_child(digTimer) """
 
 func setup_water(): #rreeeee
 	watering_timer
@@ -142,11 +142,11 @@ func fill_water(delta, tile):
 # Checks if we can dig a trench at the given position in the tile grid
 # If we can, start digging
 func digTrench(delta):
-	if digPos == null:
+	if digPos == Vector2(-1, -1):
 		if tile_manager.getTile(tilePos).type == Internal_Tile.TileType.FOREST:
 			digPos = tilePos
 	elif digPos != tilePos: # moved since started digging
-		digPos = null
+		digPos = Vector2(-1, -1)
 		digAmount = 0
 		digButtonPressed = false
 		
@@ -157,10 +157,10 @@ func digTrench(delta):
 	if digAmount >= 100: #done
 		tile_manager.setTile(tilePos, "trench")
 		
-		digPos = null
+		digPos = Vector2(-1, -1)
 		digAmount = 100
 		digButtonPressed = false
 
 func _setDigAmount(value):
 	digAmount = value
-	emit("digAmountChanged", value)
+	emit_signal("digAmountChanged", value)
