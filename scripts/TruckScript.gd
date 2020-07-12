@@ -2,7 +2,7 @@ extends Node2D
 
 const maxVelocity = 100
 const max_water = 100 # 100 for easy integration with UI
-const water_per_firing = 25 #noice and round
+const water_per_firing = 2 #noice and round
 export var water_amount = max_water
 signal water_changed(water_amount)
 var is_watering = false
@@ -13,7 +13,8 @@ var movingDir = Vector2.ZERO # Unit vector
 var velocity = 0
 var tilePos = Vector2.ZERO # Position of the truck in tile grid coordinates
 var targetPos = null
-var digTimer = Timer
+var digTimer : Timer
+var digPos : Vector2
 
 # Custom init that is called from the controller
 func customInit():
@@ -26,9 +27,18 @@ func customInit():
 # 	if event.is_action_pressed("fire_hose"):
 # 		var target = controller.worldToTile(event.position)
 
+func _ready():
+	digTimer = Timer.new()
+	digTimer.connect("timeout", self, "_on_digTimer_timeout")
+
+func setup_water():
+	watering_timer
+
 func _process(delta):
 	if Input.is_action_just_released("dig_trench"):
 		digTrench()
+	
+	if Input.is_mouse_button_pressed()
 	
 	if !targetPos:
 		if Input.is_action_pressed("truck_up"):
@@ -70,13 +80,14 @@ func _input(event):
 		if event.button_index == BUTTON_LEFT && event.pressed:
 			on_left_clicked(event)
 
-
-func on_left_clicked(event : InputEvent):
+func on_left_clicked(event: InputEvent):
+	try_fire_cannon(event.position)
+			
+func try_fire_cannon(mousePosition):
 	# redundant calls
-	print("Mouse Click at: ", event.position, "    Tile coords: ", tile_manager.worldToTile(event.position))
+	print("Trying to fire cannon at: ", mousePosition, "    Tile coords: ", tile_manager.worldToTile(mousePosition))
 
-	var pos = event.position
-	var tile_coord = tile_manager.worldToTile(pos)
+	var tile_coord = tile_manager.worldToTile(mousePosition)
 
 	# check if click is in bounds
 	if (!tile_manager.tileInBounds(tile_coord)):
@@ -118,8 +129,13 @@ func fill_water(tile):
 	# some animations, some animations on the tile maybe?
 
 # Checks if we can dig a trench at the given position in the tile grid
-# If we can, change the tile to a trench
+# If we can, start digging
 func digTrench():
 	if tile_manager.getTile(tilePos).type == Internal_Tile.TileType.FOREST:
+		digPos = tilePos
+		digTimer.start(1)
+
+func _on_digTimer_timeout():
+	if digPos == tilePos:
 		tile_manager.setTile(tilePos, "trench")
 
