@@ -63,7 +63,8 @@ func makeNewLowFireInstance(pos):
 
 func customInit():
 	worldTileSetNameMap = Utils.generateTileIDMap(worldMap)
-	fireMap.visible = false
+	if fireMap != null:
+		fireMap.visible = false
 
 	for y in range(size.y):
 		var row = []
@@ -72,14 +73,16 @@ func customInit():
 			var pos = Vector2(x,y)
 			var tile = Utils.getInternalTile(worldMap, pos, worldTileSetNameMap)
 			var fire = null
-			if fireMap.get_cellv(pos) != -1:
+			if fireMap != null && fireMap.get_cellv(pos) != -1:
 				tile.fireLevel = 100 #todo set this to max
 				fire = makeNewFireInstance(pos)
 			row.append(tile)
 			fireRow.append(fire)
 		tiles.append(row)
 		fireTiles.append(fireRow)
-	truck.customInit()
+	
+	if truck != null:
+		truck.customInit()
 
 func fireSpread():
 	var burnLevelsArr = [] #2d arr
