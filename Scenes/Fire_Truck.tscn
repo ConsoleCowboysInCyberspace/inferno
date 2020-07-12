@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/TruckScript.gd" type="Script" id=1]
 [ext_resource path="res://assets/truckUp.png" type="Texture" id=2]
 [ext_resource path="res://assets/truckRight.png" type="Texture" id=3]
 [ext_resource path="res://assets/truckLeft.png" type="Texture" id=4]
 [ext_resource path="res://assets/truckDown.png" type="Texture" id=5]
+[ext_resource path="res://scripts/DigBar.gd" type="Script" id=6]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -29,6 +30,12 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.513726, 0.341176, 0.12549, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.231373, 0.231373, 0.231373, 1 )
+
 [node name="Fire Truck" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -38,3 +45,27 @@ animation = "right"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="DigBar" type="ProgressBar" parent="Node2D"]
+margin_left = -50.0
+margin_top = -40.0
+margin_right = 50.0
+margin_bottom = -25.0
+rect_min_size = Vector2( 100, 15 )
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = SubResource( 3 )
+value = 50.0
+percent_visible = false
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="Node2D/DigBar"]
+process_mode = 0
+wait_time = 0.1
+one_shot = true
+[connection signal="digAmountChanged" from="." to="Node2D/DigBar" method="onDigAmountChanged"]
+[connection signal="timeout" from="Node2D/DigBar/Timer" to="Node2D/DigBar" method="onTimerTimeout"]

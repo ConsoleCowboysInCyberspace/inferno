@@ -21,7 +21,7 @@ var tilePos = Vector2.ZERO # Position of the truck in tile grid coordinates
 var targetPos = null
 # var digTimer : Timer
 var digPos : Vector2 = Vector2(-1, -1)
-var digAmount: float = 0 setget _setDigAmount
+var digAmount: float = 0
 signal digAmountChanged(digAmount)
 
 var lastMousePosition: Vector2 = Vector2(0, 0)
@@ -90,8 +90,7 @@ func _physics_process(delta):
 		var oneTile_vec = (lastMousePosition - position).normalized() * Internal_Tile.cellSize
 		try_fire_cannon(delta, oneTile_vec)
 	
-	if digButtonPressed:
-		digTrench(delta)
+	digTrench(delta)
 	
 	if targetPos:
 		position = position.move_toward(targetPos, velocity * delta)
@@ -148,25 +147,26 @@ func fill_water(delta, tile):
 # Checks if we can dig a trench at the given position in the tile grid
 # If we can, start digging
 func digTrench(delta):
-	if digPos == Vector2(-1, -1):
+	if digPos == Vector2(-1, -1) and digButtonPressed:
 		if tile_manager.getTile(tilePos).type == Internal_Tile.TileType.FOREST:
 			digPos = tilePos
-	elif digPos != tilePos: # moved since started digging
+			digAmount = 0
+			emit_signal("digAmountChanged", digAmount)
+	elif digPos != tilePos || targetPos != null: # moving
 		digPos = Vector2(-1, -1)
 		digAmount = 0
+		emit_signal("digAmountChanged", digAmount)
 		digButtonPressed = false
 		
 		return
-	
-	digAmount += 75 * delta #75% dig/sec?
-	
-	if digAmount >= 100: #done
-		tile_manager.setTile(tilePos, "trench")
+	else:
+		digAmount += 75 * delta #75% dig/sec?
 		
-		digPos = Vector2(-1, -1)
-		digAmount = 100
-		digButtonPressed = false
-
-func _setDigAmount(value):
-	digAmount = value
-	emit_signal("digAmountChanged", value)
+		if digAmount >= 100: #done
+			tile_manager.setTile(tilePos, "trench")
+			
+			digPos = Vector2(-1, -1)
+			digAmount = 100
+			digButtonPressed = false
+		
+		emit_signal("digAmountChanged", digAmount)
