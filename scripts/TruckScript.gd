@@ -116,6 +116,7 @@ func _process(delta):
 		emit_signal("healthAmountChanged", health)
 		if health <= 0:
 			emit_signal("noHealth")
+			get_tree().paused = true
 			tile_manager.lose()
 	
 
