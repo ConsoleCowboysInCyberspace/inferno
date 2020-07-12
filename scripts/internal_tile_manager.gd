@@ -249,7 +249,11 @@ func endWindFire():
 func nukeItFromOrbit():
 	for y in range(size.y):
 		for x in range(size.x):
+			if fireTiles[y][x]:
+				fireTiles[y][x].free()
+			fireTiles[y][x] = null
 			tiles[y][x].free()
 			tiles[y][x] = null
-		tiles[y].resize(0)
 	tiles.resize(0)
+	fireTiles.resize(0)
+	size = Vector2(0,0)
