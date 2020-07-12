@@ -4,6 +4,7 @@ var worldMap : TileMap
 var fireMap : TileMap
 var truck
 var levelRoot
+var windEmbers
 var worldTileSetNameMap
 var tiles: Array = []
 var fireTiles: Array = []
@@ -11,6 +12,7 @@ var size: Vector2
 var fireParticleScene = preload("res://Scenes/Fire.tscn")
 var fireLowParticleScene = preload("res://Scenes/FireLow.tscn")
 var cellSize
+var windTimer
 
 var fireSpreadTime = 1 #timeInSeconds
 var timeUntilNextFireSpread = fireSpreadTime

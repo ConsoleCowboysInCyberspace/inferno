@@ -11,14 +11,14 @@ _data = [ Vector2( 0, 6.54544 ), 0.0, 0.0, 0, 0, Vector2( 0.35443, 6.54544 ), 0.
 curve = SubResource( 1 )
 
 [sub_resource type="Gradient" id=3]
-offsets = PoolRealArray( 0, 0.481481, 0.992593, 1 )
-colors = PoolColorArray( 0.683594, 0.424597, 0.173569, 1, 0.741176, 0.0509804, 0.0509804, 0.768627, 0.886275, 0.0117647, 0.0117647, 0.596078, 0.92549, 0.00392157, 0.00392157, 0.168627 )
+offsets = PoolRealArray( 0, 0.481481, 1 )
+colors = PoolColorArray( 0.683594, 0.424597, 0.173569, 1, 0.741176, 0.0509804, 0.0509804, 0.768627, 0.151367, 0.151367, 0.151367, 0.596078 )
 
 [sub_resource type="GradientTexture" id=4]
 gradient = SubResource( 3 )
 
 [sub_resource type="Curve" id=5]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.805682 ), 0.323182, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.288636 ), -0.518687, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=6]
 curve = SubResource( 5 )
@@ -40,6 +40,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 linear_accel = 25.0
 linear_accel_random = 0.2
+scale = 2.0
 scale_random = 0.5
 scale_curve = SubResource( 6 )
 color_ramp = SubResource( 4 )
