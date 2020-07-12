@@ -5,6 +5,8 @@ const max_water = 100 # 100 for easy integration with UI
 const water_per_firing = 25 #noice and round
 export var water_amount = max_water
 signal water_changed(water_amount)
+var is_watering = false
+var watering_timer = Timer.new()
 
 export var squareSize : int
 var movingDir = Vector2.ZERO # Unit vector

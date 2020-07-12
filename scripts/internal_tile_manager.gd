@@ -9,6 +9,7 @@ var tiles: Array = []
 var fireTiles: Array = []
 var size: Vector2
 var fireParticleScene = preload("res://Scenes/Fire.tscn")
+var fireLowParticleScene = preload("res://Scenes/FireLow.tscn")
 var cellSize
 
 var fireSpreadTime = 1 #timeInSeconds
@@ -49,6 +50,13 @@ func worldToTile(worldPos : Vector2) -> Vector2 :
 func makeNewFireInstance(pos):
 	var newFire = fireParticleScene.instance()
 	newFire.set_name("fire" + str(pos.x) + ", " + str(pos.y))
+	levelRoot.add_child(newFire)
+	newFire.position = tileToWorld(pos)
+	return newFire
+
+func makeNewLowFireInstance(pos):
+	var newFire = fireLowParticleScene.instance()
+	newFire.set_name("fireLow" + str(pos.x) + ", " + str(pos.y))
 	levelRoot.add_child(newFire)
 	newFire.position = tileToWorld(pos)
 	return newFire
@@ -113,8 +121,17 @@ func _process(delta):
 	for y in range(size.y):
 		for x in range(size.x):
 			var tile = tiles[y][x]
+			if tile.fireLevel == Internal_Tile.maxFireLevel && !tile.lowParticle:
+				tile.lowParticle = true
+				fireTiles[y][x].free()
+				fireTiles[y][x] = makeNewLowFireInstance(Vector2(x,y))
 			if tile.fireLevel > 0:
 				if !fireTiles[y][x]:
 					fireTiles[y][x] = makeNewFireInstance(Vector2(x,y))
 				var scale = clamp((tile.fireLevel/float(Internal_Tile.maxFireLevel)) * 1.5, 0.5, 1.5 )
 				fireTiles[y][x].scale = Vector2(scale, scale)
+			
+			else:
+				if fireTiles[y][x]:
+					fireTiles[y][x].free()
+					fireTiles[y][x] = null

@@ -11,6 +11,7 @@ var movementCost: int
 var type
 var nonFlamable = false
 var neighbors = []
+var lowParticle = false
 
 func _init(tileType):
 	fireLevel = 0
