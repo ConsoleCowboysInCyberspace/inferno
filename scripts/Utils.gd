@@ -19,8 +19,9 @@ const vonNeumannNeighbors = [
 # Param: nameMap - an array matching names of tiles in the TileSet to TileSet IDs
 func getInternalTile(tileMap, pos, nameMap):
 	var id = tileMap.get_cellv(pos)
-	assert(id != -1, "someone should really make sure that the map has no holes in it")
-	var tile = Internal_Tile.new(nameMap[id])
+	var name = nameMap[id] if id != -1 else ""
+	# assert(id != -1, "someone should really make sure that the map has no holes in it")
+	var tile = Internal_Tile.new(name)
 	tile.pos = pos
 	return tile
 
