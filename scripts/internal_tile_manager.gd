@@ -13,6 +13,7 @@ const fireParticleScene = preload("res://Scenes/Fire.tscn")
 const fireLowParticleScene = preload("res://Scenes/FireLow.tscn")
 var cellSize
 var windTimer
+var scoreTimer
 var mostForwardCol = -1
 var numTowns = 0
 var score = 0
@@ -98,6 +99,17 @@ func customInit():
 	windTimer.wait_time = Utils.randInt(10, 15)
 	windTimer.set_one_shot(false)
 	windTimer.start()
+	
+	scoreTimer = Timer.new()
+	scoreTimer.connect("scoreTick", self, "incScore")
+	add_child(scoreTimer)
+	scoreTimer.wait_time(5)
+	scoreTimer.set_one_shot(false)
+	scoreTimer.start()
+
+func incScore():
+	score += numTowns
+	print("Score = ", score)
 
 func fireSpread():
 	var burnLevelsArr = [] #2d arr
