@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/drytree2.png-e4e246d132afc845ec64d1669115fa1c.stex"
+path="res://.import/LargeHousebackground.png-c3b7a1ab71fa3c0f7b228f6fb05ce5d0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/terrain/drytree2.png"
-dest_files=[ "res://.import/drytree2.png-e4e246d132afc845ec64d1669115fa1c.stex" ]
+source_file="res://assets/sprites/terrain/LargeHousebackground.png"
+dest_files=[ "res://.import/LargeHousebackground.png-c3b7a1ab71fa3c0f7b228f6fb05ce5d0.stex" ]
 
 [params]
 

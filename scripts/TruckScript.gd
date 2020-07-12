@@ -7,6 +7,9 @@ export var water_amount = max_water
 export var water_fill_rate = 50 # amount of water restored over a second
 export var waterCannonRange = 1
 
+onready var fire_hose = Node2D.new() # temp TODO replace with $fire_hose
+onready var water_particle_emitter = Particles2D.new() # temp TODO replace
+ 
 signal water_changed(water_amount)
 var watering_timer : Timer
 
@@ -40,9 +43,6 @@ func _ready():
 	digTimer.one_shot = true
 	add_child(digTimer) """
 
-func setup_water(): #rreeeee
-	watering_timer
-
 var fireButtonPressed: bool = false
 var digButtonPressed: bool = false
 func _process(delta):
@@ -50,8 +50,9 @@ func _process(delta):
 		digButtonPressed = Input.is_action_just_pressed("dig_trench")
 	
 	if Input.is_mouse_button_pressed(BUTTON_LEFT):
-		lastMousePosition = get_global_mouse_position()
+		lastMousePosition = get_global_mouse_position()		
 		fireButtonPressed = true
+		spin_fire_hose(lastMousePosition)
 	
 	if !targetPos:
 		if Input.is_action_pressed("truck_up"):
@@ -80,9 +81,14 @@ func _process(delta):
 				targetPos = tile_manager.tileToWorld(tilePos + movingDir)
 				velocity = maxVelocity/moveCost
 
+func spin_fire_hose(target_pos):
+	var to_pos = target_pos - position
+	fire_hose.rotation = position.angle_to_point(target_pos)
+
 func _physics_process(delta):
 	if fireButtonPressed:
-		try_fire_cannon(delta, lastMousePosition)
+		var oneTile_vec = (lastMousePosition - position).normalized() * Internal_Tile.cellSize
+		try_fire_cannon(delta, oneTile_vec)
 	
 	if digButtonPressed:
 		digTrench(delta)

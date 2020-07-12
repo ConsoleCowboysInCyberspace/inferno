@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/TreePine.png-33edd5efd74401d9987ff528a0509545.stex"
+path="res://.import/TInyHousebackground.png-5e093ed3cd3df947be8096d8eeff9152.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/terrain/TreePine.png"
-dest_files=[ "res://.import/TreePine.png-33edd5efd74401d9987ff528a0509545.stex" ]
+source_file="res://assets/sprites/terrain/TInyHousebackground.png"
+dest_files=[ "res://.import/TInyHousebackground.png-5e093ed3cd3df947be8096d8eeff9152.stex" ]
 
 [params]
 

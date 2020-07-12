@@ -11,7 +11,7 @@ var fireTiles: Array = []
 var size: Vector2
 const fireParticleScene = preload("res://Scenes/Fire.tscn")
 const fireLowParticleScene = preload("res://Scenes/FireLow.tscn")
-var cellSize
+var cellSize = 64
 var windTimer
 var mostForwardCol = -1
 
@@ -27,6 +27,10 @@ func getTile(pos: Vector2):
 func setTile(pos: Vector2, type):
 	tiles[pos.y][pos.x] = Internal_Tile.new(type)
 	worldMap.set_cellv(pos, worldTileSetNameMap.find(type))
+
+func setTileSprite(pos, type):
+	worldMap.set_cellv(pos, worldTileSetNameMap.find(type))
+
 
 # Returns -1 for non-traversable tiles and out of bounds positions
 # Otherwise, returns the movementCost of the tile at the given position
@@ -91,6 +95,7 @@ func customInit():
 	windTimer = Timer.new()
 	windTimer.connect("timeout", self, "windTimerTimeout")
 	add_child(windTimer)
+	windTimer.process_mode = 0
 	windTimer.wait_time = Utils.randInt(10, 15)
 	windTimer.set_one_shot(false)
 	windTimer.start()
@@ -163,6 +168,7 @@ func windTimerTimeout():
 	windTimer.one_shot = true
 
 	#todo move wind
+	windEmbers.position.x = tileToWorld(Vector2(mostForwardCol, 0))
 	windEmbers.emitting = true
 	windTimer.start()
 

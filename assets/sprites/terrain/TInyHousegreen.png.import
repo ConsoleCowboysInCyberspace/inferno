@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/TinyHouse.png-4751c7999eddb700b366c1653fa4c41f.stex"
+path="res://.import/TInyHousegreen.png-de5e28447407f9e5346d76ad0f070f2a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/terrain/TinyHouse.png"
-dest_files=[ "res://.import/TinyHouse.png-4751c7999eddb700b366c1653fa4c41f.stex" ]
+source_file="res://assets/sprites/terrain/TInyHousegreen.png"
+dest_files=[ "res://.import/TInyHousegreen.png-de5e28447407f9e5346d76ad0f070f2a.stex" ]
 
 [params]
 

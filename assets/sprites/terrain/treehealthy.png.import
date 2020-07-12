@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/drytrunk.png-d7526007ca622a649f472509a4277530.stex"
+path="res://.import/treehealthy.png-63ea9aede3b27ccd552d6f396ef4563c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/terrain/drytrunk.png"
-dest_files=[ "res://.import/drytrunk.png-d7526007ca622a649f472509a4277530.stex" ]
+source_file="res://assets/sprites/terrain/treehealthy.png"
+dest_files=[ "res://.import/treehealthy.png-63ea9aede3b27ccd552d6f396ef4563c.stex" ]
 
 [params]
 
