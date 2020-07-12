@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 onready var score = find_node("Score")
+onready var healthBar = find_node("HealthBar")
 onready var waterBar = find_node("WaterBar")
 onready var anemometer = find_node("Anemometer")
 
@@ -12,13 +13,16 @@ func _process(delta):
 	if now - lastUpdateTime > 1:
 		lastUpdateTime = now
 		
-		set_score(randi() % 10000)
+		set_score(now)
 		# set_water_level(randi() % 100)
 		# set_wind_angle(randi() % 360)
 		# set_wind_speed(randi() % 100)
 
 func set_score(value):
 	score.bbcode_text = "[right]" + String(value) + "[/right]"
+
+func set_health(value):
+	healthBar.value = value
 
 func set_water_level(value):
 	waterBar.value = value
