@@ -12,6 +12,8 @@ onready var fireArrowSprite = newFireArrow.get_node("Sprite")
 onready var arrowTimer = Timer.new()
 var arrowTarget : Vector2
 
+onready var gameOverPre = preload("res://Scenes/gameover.tscn")
+
 func _ready():
 
 	# setting up fire arrow
@@ -52,7 +54,9 @@ func arrowTimerTimeout():
 	newFireArrow.visible = false
 
 func on_death():
-	var gameover = $gameover
+	var gameover = gameOverPre.instance()
+	add_child(gameover)
+	var button = gameover.get_node("TextureButton")
 	gameover.visible = true
 	gameover.get_node("RichTextLabel").text = "Your Score: " + String(tile_manager.score)
-	gameover.get_node("TextureButton").disabled = false
+	button.disabled = false
