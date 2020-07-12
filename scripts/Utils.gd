@@ -46,7 +46,7 @@ func findForwardMostFullFireColumn(tiles):
 	for x in range(len(tiles[0]) - 1, -1, -1):
 		var full = true
 		for y in len(tiles):
-			if tiles[y][x].fireLevel != Internal_Tile.maxFireLevel:
+			if tiles[y][x].burnedDown == false:
 				full = false
 				break
 		if full:

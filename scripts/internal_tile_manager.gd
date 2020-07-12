@@ -17,9 +17,10 @@ var scoreTimer
 var mostForwardCol = -1
 var numTowns = 0
 var score = 0
+signal windFire(pos)
 
-const fireSpreadStrength = 1 #constant multiplier for burn size
-const fireSpreadTime = .5 #timeInSeconds
+const fireSpreadStrength = .75 #constant multiplier for burn size
+const fireSpreadTime = 2 #timeInSeconds
 var timeUntilNextFireSpread = fireSpreadTime
 
 # Returns the tile object at the given grid position
@@ -220,7 +221,7 @@ func windTimerTimeout():
 
 
 func startWindFire():
-	var newFires = Utils.randInt(1, 3)
+	var newFires = Utils.randInt(1, 2)
 	var forwardDistance = Utils.randInt(10, 18) # Range of distance from mostForwardCol that fire can spawn
 	var fireTiles = []
 	for i in range(newFires):
@@ -238,6 +239,6 @@ func endWindFire():
 	windEmbers.emitting = false
 	windTimer.disconnect("timeout", self, "endWindFire")
 	windTimer.connect("timeout", self, "windTimerTimeout")
-	windTimer.wait_time = Utils.randInt(30, 50)
+	windTimer.wait_time = Utils.randInt(20, 30)
 	windTimer.one_shot = false
 	windTimer.start()

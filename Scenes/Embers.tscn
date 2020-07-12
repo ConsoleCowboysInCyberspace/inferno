@@ -18,7 +18,7 @@ lifetime_randomness = 0.66
 trail_divisor = 2
 trail_size_modifier = SubResource( 4 )
 emission_shape = 2
-emission_box_extents = Vector3( 10, 200, 1 )
+emission_box_extents = Vector3( 10, 800, 1 )
 flag_disable_z = true
 spread = 15.0
 gravity = Vector3( 0, 0, 0 )
@@ -36,8 +36,7 @@ scale_random = 0.5
 color_ramp = SubResource( 2 )
 
 [node name="Particles2D" type="Particles2D"]
-position = Vector2( -22.4492, 309.8 )
 amount = 300
 lifetime = 6.0
-visibility_rect = Rect2( -100, -600, 1400, 1200 )
+visibility_rect = Rect2( -100, -1050, 1400, 2100 )
 process_material = SubResource( 5 )

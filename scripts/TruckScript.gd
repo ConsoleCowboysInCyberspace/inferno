@@ -23,6 +23,7 @@ export var digTime : int
 var movingDir = Vector2.ZERO # Unit vector
 var velocity = 0
 var tilePos = Vector2.ZERO # Position of the truck in tile grid coordinates
+var currentTile
 var targetPos = null
 # var digTimer : Timer
 var digPos : Vector2 = Vector2(-1, -1)
@@ -39,8 +40,11 @@ func customInit():
 	# (e.g. if we're dropped in willy-nilly from the editor)
 	position = tile_manager.tileToWorld(tile_manager.worldToTile(position))
 	tilePos = tile_manager.worldToTile(position)
+	currentTile = tile_manager.getTile(tilePos)
 	
-	emit_signal("water_changed", water_amount) #initialize UI
+	#initialize UI
+	emit_signal("water_changed", water_amount) 
+	emit_signal("healthAmountchanged", health)
 
 func _ready():
 	""" digTimer = Timer.new()
@@ -105,14 +109,11 @@ func _process(delta):
 	else:
 		water_emitter.emitting = false
 	
-	# health
-
-	# check tile
+	# damage if in fire
+	if currentTile.fireLevel >= 0:
+		health = health - currentTile.fireLevel * fire_damage_multiplier * delta
+		emit_signal("onHealthChanged", health)
 	
-
-func spin_fire_hose(target_pos):
-	var to_pos = target_pos - position
-	fire_hose.rotation = position.angle_to_point(target_pos) + PI # something was rotated at some point
 
 func _physics_process(delta):
 	if fireButtonPressed: 
@@ -124,9 +125,14 @@ func _physics_process(delta):
 		position = position.move_toward(targetPos, velocity * delta)
 		if (position == targetPos):
 			tilePos = tile_manager.worldToTile(position)
+			currentTile = tile_manager.getTile(tilePos)
 			movingDir = Vector2.ZERO
 			targetPos = null
 			velocity = 0
+
+func spin_fire_hose(target_pos):
+	var to_pos = target_pos - position
+	fire_hose.rotation = position.angle_to_point(target_pos) + PI # something was rotated at some point
 
 func try_fire_cannon(delta, mousePosition):
 
@@ -165,8 +171,9 @@ func waterTiles(tile):
 	var targetTile
 	for vec in Utils.mooreNeighbors:
 		coord = tile.pos + vec
-		targetTile = tile_manager.getTile(coord)
-		targetTile.water()
+		if tile_manager.tileInBounds(coord):
+			targetTile = tile_manager.getTile(coord)
+			targetTile.water()
 		
 
 func fill_water(delta, tile):

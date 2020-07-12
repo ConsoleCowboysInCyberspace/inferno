@@ -32,12 +32,12 @@ func _init(tileType):
 			type = TileType.BLANK
 			nonFlammable = true
 		"forest":
-			fireResistance = 4
+			fireResistance = 6
 			movementCost = 2
 			type = TileType.FOREST
 			diggable = true
 		"forestDry":
-			fireResistance = 0
+			fireResistance = 3
 			movementCost = 2
 			type = TileType.FOREST_DRY
 			diggable = true
@@ -84,7 +84,7 @@ func _init(tileType):
 			type = TileType.MOUNTAIN
 			nonFlammable = true
 		"grass":
-			fireResistance = 6
+			fireResistance = 5
 			movementCost = 1.5
 			type = TileType.GRASS
 			diggable = true
