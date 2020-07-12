@@ -42,3 +42,4 @@ tile_data = PoolIntArray( 327683, 0, 0, 1310746, 0, 0, 1376271, 0, 0, 1376275, 0
 [node name="Fire_Truck" parent="." instance=ExtResource( 3 )]
 position = Vector2( 79.8519, 79.6196 )
 scale = Vector2( 0.5, 0.5 )
+[connection signal="water_changed" from="Fire_Truck" to="GUI" method="set_water_level"]
