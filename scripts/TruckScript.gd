@@ -8,6 +8,7 @@ signal water_changed(water_amount)
 var is_watering = false
 var watering_timer = Timer.new()
 
+export var digTime : int
 export var squareSize : int
 var movingDir = Vector2.ZERO # Unit vector
 var velocity = 0
@@ -33,6 +34,7 @@ func customInit():
 func _ready():
 	digTimer = Timer.new()
 	digTimer.connect("timeout", self, "_on_digTimer_timeout")
+	add_child(digTimer)
 
 func setup_water():
 	watering_timer
@@ -42,6 +44,7 @@ func _process(delta):
 		digTrench()
 	
 	if Input.is_mouse_button_pressed(BUTTON_LEFT):
+		lastMousePosition = get_global_mouse_position()
 		try_fire_cannon(lastMousePosition)
 	
 	if !targetPos:
@@ -80,12 +83,6 @@ func _process(delta):
 			targetPos = null
 			velocity = 0
 
-func _input(event):
-	if event is InputEventMouseMotion:
-		# we have to cache this as there is no way to proactively
-		# query it from the Input system
-		lastMousePosition = event.position
-
 func try_fire_cannon(mousePosition):
 	# redundant calls
 	print("Trying to fire cannon at: ", mousePosition, "    Tile coords: ", tile_manager.worldToTile(mousePosition))
@@ -100,7 +97,7 @@ func try_fire_cannon(mousePosition):
 	var tile = tile_manager.getTile(tile_coord)
 
 	# if tile is adjacent to truck
-	if (Utils.manhattanDistance(tilePos, tile_coord)):
+	if (Utils.manhattanDistance(tilePos, tile_coord) <= 1):
 		
 		# put out fire on tile
 		fire_waterCannon(tile)
@@ -110,7 +107,7 @@ func try_fire_cannon(mousePosition):
 			fill_water(tile)
 	
 	else:
-		print("click is further than 1 tile from truck")
+		print("click is further than 1 tile from truck: ", Utils.manhattanDistance(tilePos, tile_coord))
 		return
 
 # fires water on tile unless truck has ed
@@ -124,7 +121,7 @@ func fire_waterCannon(tile):
 		# shoot dust, be sad UwU
 		print("truck has insufficient water")
 	else:
-		tile.fireLevel -= 50 # make betterer
+		tile.water()
 		water_amount = new_amount
 		emit_signal("water_changed", water_amount)
 
@@ -139,7 +136,7 @@ func fill_water(tile):
 func digTrench():
 	if tile_manager.getTile(tilePos).type == Internal_Tile.TileType.FOREST:
 		digPos = tilePos
-		digTimer.start(1)
+		digTimer.start(digTime)
 
 func _on_digTimer_timeout():
 	if digPos == tilePos:
