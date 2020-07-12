@@ -179,8 +179,8 @@ func fireSpread():
 func setBurnLevel(burnLevelsArr, pos):
 	var fireLevel = getTile(pos).fireLevel
 	var neighbors = [] 
-	if getTile(pos).type == Internal_Tile.TileType.TRENCH && !getTile(pos).burnedDown:
-		return
+	# if getTile(pos).burnedDown:
+	# 	return
 	for potentialNeighbor in Utils.mooreNeighbors:
 		if tileInBounds(pos + potentialNeighbor) && getTile(pos + potentialNeighbor).nonFlammable == false and potentialNeighbor != Vector2.ZERO:
 			neighbors.append(pos + potentialNeighbor)
