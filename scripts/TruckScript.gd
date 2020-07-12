@@ -8,6 +8,7 @@ signal water_changed(water_amount)
 var is_watering = false
 var watering_timer = Timer.new()
 
+export var digTime : int
 export var squareSize : int
 var movingDir = Vector2.ZERO # Unit vector
 var velocity = 0
@@ -33,6 +34,7 @@ func customInit():
 func _ready():
 	digTimer = Timer.new()
 	digTimer.connect("timeout", self, "_on_digTimer_timeout")
+	add_child(digTimer)
 
 func setup_water():
 	watering_timer
@@ -139,7 +141,7 @@ func fill_water(tile):
 func digTrench():
 	if tile_manager.getTile(tilePos).type == Internal_Tile.TileType.FOREST:
 		digPos = tilePos
-		digTimer.start(1)
+		digTimer.start(digTime)
 
 func _on_digTimer_timeout():
 	if digPos == tilePos:
