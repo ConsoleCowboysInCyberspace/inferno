@@ -112,7 +112,7 @@ func customInit():
 			if fireMap != null && fireMap.get_cellv(pos) != -1:
 				tile.fireLevel = Internal_Tile.maxFireLevel #todo set this to max
 				fire = makeNewFireInstance(pos)
-			if(tile.type == Internal_Tile.TileType.EMPTY):
+			if(tile.type == Internal_Tile.TileType.TOWN):
 				numTowns += 1
 			row.append(tile)
 			fireRow.append(fire)
@@ -131,15 +131,19 @@ func customInit():
 	windTimer.start()
 	
 	scoreTimer = Timer.new()
-	scoreTimer.connect("scoreTick", self, "incScore")
+	scoreTimer.connect("timeout", self, "incScore")
 	add_child(scoreTimer)
 	scoreTimer.wait_time = 5
 	scoreTimer.set_one_shot(false)
 	scoreTimer.start()
+	
+	print("score timer ", scoreTimer)
 
 func incScore():
 	score += numTowns
+	
 	print("Score = ", score)
+	
 func lose():
 	pass
 func fireSpread():
@@ -178,7 +182,6 @@ func setBurnLevel(burnLevelsArr, pos):
 	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireSpreadStrength * sqrt(fireLevel)
 
 func _physics_process(delta):
-	incScore()
 	if timeUntilNextFireSpread <= 0:
 		fireSpread()
 		timeUntilNextFireSpread = fireSpreadTime

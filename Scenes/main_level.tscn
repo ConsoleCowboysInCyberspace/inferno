@@ -47,4 +47,5 @@ digTime = 1
 position = Vector2( 21.748, 1013.24 )
 emitting = false
 [connection signal="healthAmountChanged" from="Fire_Truck" to="GUI" method="set_health"]
+[connection signal="noHealth" from="Fire_Truck" to="GUI" method="on_death"]
 [connection signal="water_changed" from="Fire_Truck" to="GUI" method="set_water_level"]

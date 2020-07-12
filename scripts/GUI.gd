@@ -17,26 +17,18 @@ func _ready():
 	# setting up fire arrow
 	tile_manager.connect("windFireStarted", self, "new_fire_started")
 	arrowTimer.connect("timeout", self, "arrowTimerTimeout")
+	add_child(arrowTimer)
 	arrowTimer.one_shot = true
 
-# temp debug code
-var lastUpdateTime = 0
 func _process(delta):
 
 	# not debug code
 	# rotate arrow to face target
 	var toTarget = arrowTarget - newFireArrow.position
 	newFireArrow.rotation = newFireArrow.position.angle_to_point(arrowTarget)
-
-	var now = OS.get_ticks_msec() / 1000
 	
-	if now - lastUpdateTime > 1:
-		lastUpdateTime = now
-		
-		set_score(now)
-		# set_water_level(randi() % 100)
-		# set_wind_angle(randi() % 360)
-		# set_wind_speed(randi() % 100)
+	# poll score like a pleb
+	set_score(tile_manager.score)
 
 func set_score(value):
 	score.bbcode_text = "[right]" + String(value) + "[/right]"
@@ -60,3 +52,8 @@ func new_fire_started(pos):
 
 func arrowTimerTimeout():
 	fireArrowSprite.visible = false
+
+func on_death():
+	var gameover = $gameover
+	gameover.visible = true
+	gameover.get_node("RichTextLabel").text = "Your Score: " + String(tile_manager.score)

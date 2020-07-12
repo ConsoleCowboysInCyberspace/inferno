@@ -174,15 +174,26 @@ __meta__ = {
 texture = ExtResource( 3 )
 
 [node name="gameover" type="Sprite" parent="."]
+visible = false
 position = Vector2( 497.302, 191.614 )
 scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 4 )
 
+[node name="Panel" type="Panel" parent="gameover"]
+margin_left = -493.0
+margin_top = 268.0
+margin_right = 272.0
+margin_bottom = 380.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="RichTextLabel" type="RichTextLabel" parent="gameover"]
-margin_left = -163.273
-margin_top = 277.002
-margin_right = 85.7272
-margin_bottom = 317.002
+margin_left = -484.19
+margin_top = 286.441
+margin_right = -235.19
+margin_bottom = 326.441
+rect_scale = Vector2( 4, 4 )
 text = "You scored:"
 __meta__ = {
 "_edit_use_anchors_": false

@@ -45,7 +45,7 @@ func customInit():
 	
 	#initialize UI
 	emit_signal("water_changed", water_amount) 
-	emit_signal("healthAmountchanged", health)
+	emit_signal("healthAmountChanged", health)
 
 func _ready():
 	""" digTimer = Timer.new()
