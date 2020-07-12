@@ -49,17 +49,17 @@ func _init(tileType):
 	
 func water():
 	fireLevel = clamp(fireLevel - 50, 0, maxFireLevel)
+
 func burnDown():
+	fireResistance = 0
+	if type = TOWN:
+		internalTile.burnTown()
+
 func burn(burnLevel):
 	if fireResistance == -1 || nonFlamable:
 		return
-
-	fireLevel += clamp(burnLevel - fireResistance, 0, 100)
-	elif fireResistance >= burnLevel || fireLevel == maxFireLevel:
-		return
-	else:
-		fireLevel += burnLevel - fireResistance
-		if fireLevel > maxFireLevel:
-			fireLevel = maxFireLevel
-
+	fireLevel += clamp(clamp(burnLevel - fireResistance, 0, 100), 0, 100)
+	if(firelevel > maxFireLevel/2):
+		burnDown()
+	
 
