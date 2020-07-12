@@ -7,6 +7,13 @@ export var windSpeed = 0 setget _set_speed # MPH?
 const diameter = 35
 onready var speedLabel = get_parent().find_node("WindSpeed")
 
+func _ready():
+	Wind.connect("wind_angle_changed", self, "_set_angle")
+	Wind.connect("wind_speed_changed", self, "_set_speed")
+	
+	windAngle = Wind.wind_angle
+	windSpeed = Wind.wind_speed
+
 func _draw():
 	var radAng = deg2rad(windAngle)
 	var lineEnd = diameter / 2 * Vector2(cos(radAng), sin(radAng))

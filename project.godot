@@ -28,6 +28,7 @@ config/icon="res://icon.png"
 
 tile_manager="*res://scripts/internal_tile_manager.gd"
 Utils="*res://scripts/Utils.gd"
+Wind="*res://scripts/Wind.gd"
 
 [input]
 
