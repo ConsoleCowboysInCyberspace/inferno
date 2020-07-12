@@ -2,7 +2,7 @@ extends Object
 class_name Internal_Tile
 
 enum TileType {EMPTY, TOWN, FOREST, WATER, ROAD, TRENCH}
-const maxFireLevel = 100
+const maxFireLevel = 400
 
 var pos: Vector2
 var fireLevel: int = 0
@@ -39,7 +39,7 @@ func _init(tileType):
 			movementCost = 1
 			type = TileType.ROAD
 		"trench":
-			fireResistance = 7
+			fireResistance = 15
 			movementCost = 2
 			type = TileType.TRENCH
 			

@@ -108,7 +108,7 @@ func fireSpreadHelperSchemeOne(burnLevelsArr, pos):
 			neighbors.append(pos + potentialNeighbor)
 	
 	var tileToBurn = neighbors[rand_range(0, len(neighbors))]
-	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireLevel/10.0
+	burnLevelsArr[tileToBurn.y][tileToBurn.x] += 2 * log(fireLevel)
 
 func _physics_process(delta):
 	if timeUntilNextFireSpread <= 0:
