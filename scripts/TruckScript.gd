@@ -183,8 +183,9 @@ func waterTiles(tile):
 
 func fill_water(delta, tile):
 	#print("filling water")
-	water_amount += water_fill_rate * delta
-	emit_signal("water_changed", water_amount)
+	if(water_amount < max_water):
+		water_amount = clamp(water_amount + water_fill_rate * delta, 0, 100)
+		emit_signal("water_changed", water_amount)
 	# some animations, some animations on the tile maybe?
 
 # Checks if we can dig a trench at the given position in the tile grid

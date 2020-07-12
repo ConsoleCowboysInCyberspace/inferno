@@ -34,27 +34,34 @@ func setTile(pos: Vector2, type):
 	worldMap.set_cellv(pos, worldTileSetNameMap.find(type))
 
 func burnTile(pos: Vector2, type):
+	var xFlip = worldMap.is_cell_x_flipped(pos.x, pos.y)
+	var yFlip = worldMap.is_cell_y_flipped(pos.x, pos.y)
+	var transposed = worldMap.is_cell_transposed(pos.x, pos.y)
+	var newType = worldMap.get_cellv(pos)
+	
 	match type:
 		Internal_Tile.TileType.FOREST:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("burnedForest"))
+			newType = worldTileSetNameMap.find("burnedForest")
 		Internal_Tile.TileType.FOREST_DRY:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("burnedForest"))
+			newType = worldTileSetNameMap.find("burnedForest")
 		Internal_Tile.TileType.TOWN:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("townBurned"))
+			newType = worldTileSetNameMap.find("townBurned")
 		Internal_Tile.TileType.TOWN_SMALL:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("townBurnedSmall"))
+			newType = worldTileSetNameMap.find("townBurnedSmall")
 		Internal_Tile.TileType.GRASS:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("grassBurned"))
+			newType = worldTileSetNameMap.find("grassBurned")
 		Internal_Tile.TileType.ROAD:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadBurned"))
+			newType = worldTileSetNameMap.find("roadBurned")
 		Internal_Tile.TileType.ROAD_CROSS:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadCrossBurned"))
+			newType = worldTileSetNameMap.find("roadCrossBurned")
 		Internal_Tile.TileType.ROAD_TURN:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadTurnBurned"))	
+			newType = worldTileSetNameMap.find("roadTurnBurned")
 		Internal_Tile.TileType.ROAD_T:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadTBurned"))
+			newType = worldTileSetNameMap.find("roadTBurned")
 		Internal_Tile.TileType.ROAD_END:
-			worldMap.set_cellv(pos, worldTileSetNameMap.find("roadEndBurned"))
+			newType = worldTileSetNameMap.find("roadEndBurned")
+	
+	worldMap.set_cellv(pos, newType, xFlip, yFlip, transposed)
 
 func setTileSprite(pos, type):
 	worldMap.set_cellv(pos, worldTileSetNameMap.find(type))

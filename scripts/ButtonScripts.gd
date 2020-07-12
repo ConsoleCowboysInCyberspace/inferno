@@ -1,6 +1,7 @@
 extends Node
 
 func switch_scene(path):
+	print("REEEEEEEE")
 	call_deferred("_switch_callback", path)
 
 func _switch_callback(path):
