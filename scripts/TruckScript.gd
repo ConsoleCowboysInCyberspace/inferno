@@ -15,6 +15,7 @@ var tilePos = Vector2.ZERO # Position of the truck in tile grid coordinates
 var targetPos = null
 var digTimer : Timer
 var digPos : Vector2
+var lastMousePosition: Vector2 = Vector2(0, 0)
 
 # Custom init that is called from the controller
 func customInit():
@@ -40,8 +41,8 @@ func _process(delta):
 	if Input.is_action_just_released("dig_trench"):
 		digTrench()
 	
-	if Input.is_mouse_button_pressed():
-		pass
+	if Input.is_mouse_button_pressed(BUTTON_LEFT):
+		try_fire_cannon(lastMousePosition)
 	
 	if !targetPos:
 		if Input.is_action_pressed("truck_up"):
@@ -79,13 +80,11 @@ func _process(delta):
 			velocity = 0
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT && event.pressed:
-			on_left_clicked(event)
+	if event is InputEventMouseMotion:
+		# we have to cache this as there is no way to proactively
+		# query it from the Input system
+		lastMousePosition = event.position
 
-func on_left_clicked(event: InputEvent):
-	try_fire_cannon(event.position)
-			
 func try_fire_cannon(mousePosition):
 	# redundant calls
 	print("Trying to fire cannon at: ", mousePosition, "    Tile coords: ", tile_manager.worldToTile(mousePosition))
@@ -115,6 +114,9 @@ func try_fire_cannon(mousePosition):
 
 # fires water on tile unless truck has ed
 func fire_waterCannon(tile):
+	print("firing water cannon at ", tile)
+	print(water_amount)
+	print(water_per_firing)
 	var new_amount = water_amount - water_per_firing
 	
 	if (new_amount < 0):
