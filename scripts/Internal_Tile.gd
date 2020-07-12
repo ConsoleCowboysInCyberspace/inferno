@@ -45,7 +45,8 @@ func _init(tileType):
 			
 func min(value):
 	return value if value >= 0 else 0
-
+func water():
+	fireLevel = clamp(fireLevel - 50, 0, maxFireLevel)
 func burn(burnLevel):
 	if fireResistance == -1 || nonFlamable:
 		return
