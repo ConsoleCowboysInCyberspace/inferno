@@ -41,7 +41,6 @@ func manhattanDistance(posA : Vector2, posB : Vector2) -> int:
 func findForwardMostFullFireColumn(tiles):
 	var mostForwardColumn = -1
 
-
 	for x in range(len(tiles[0]) - 1, -1, -1):
 		var full = true
 		for y in len(tiles):
@@ -53,6 +52,7 @@ func findForwardMostFullFireColumn(tiles):
 			break
 	return mostForwardColumn
 
+#returns a rand int between too and from -- inclusive
 func randInt(to:int, from:int) -> int:
 	assert(from - to > 0)
 	return (randi()%(from + 1 - to)) + to

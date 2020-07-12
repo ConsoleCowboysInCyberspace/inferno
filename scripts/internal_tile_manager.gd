@@ -9,13 +9,14 @@ var worldTileSetNameMap
 var tiles: Array = []
 var fireTiles: Array = []
 var size: Vector2
-var fireParticleScene = preload("res://Scenes/Fire.tscn")
-var fireLowParticleScene = preload("res://Scenes/FireLow.tscn")
+const fireParticleScene = preload("res://Scenes/Fire.tscn")
+const fireLowParticleScene = preload("res://Scenes/FireLow.tscn")
 var cellSize
 var windTimer
 var mostForwardCol = -1
 
-var fireSpreadTime = 1 #timeInSeconds
+const fireSpreadStrength = 2 #constant multiplier for burn size
+const fireSpreadTime = 1 #timeInSeconds
 var timeUntilNextFireSpread = fireSpreadTime
 
 # Returns the tile object at the given grid position
@@ -91,29 +92,32 @@ func customInit():
 	windTimer.connect("timeout", self, "windTimerTimeout")
 	add_child(windTimer)
 	windTimer.wait_time = Utils.randInt(10, 15)
-	print("next wind ", windTimer.wait_time)
 	windTimer.set_one_shot(false)
 	windTimer.start()
 
 func fireSpread():
 	var burnLevelsArr = [] #2d arr
+	
+	# populate burnLevelsArr
 	for y in range(size.y):
 		var row = []
 		for x in range(size.x):
 			row.append(0)
 		burnLevelsArr.append(row)
 	
+	# simulate burning -- may affect several tiles concurrently
 	for y in range(size.y):
 		for x in range(size.x):
-			fireSpreadHelperSchemeOne(burnLevelsArr, Vector2(x, y))
-
+			setBurnLevel(burnLevelsArr, Vector2(x, y))
+			
+	# write back updated burning values
 	for y in range(size.y):
 		for x in range(size.x):
 			#print("burned tile " + str(x) + ", " + str(y) + "for value " + str(burnLevelsArr[y][x]))
 			getTile(Vector2(x,y)).burn(burnLevelsArr[y][x])
 			
 			
-func fireSpreadHelperSchemeOne(burnLevelsArr, pos):
+func setBurnLevel(burnLevelsArr, pos):
 	var fireLevel = getTile(pos).fireLevel
 	var neighbors = [] 
 
@@ -122,7 +126,7 @@ func fireSpreadHelperSchemeOne(burnLevelsArr, pos):
 			neighbors.append(pos + potentialNeighbor)
 	
 	var tileToBurn = neighbors[rand_range(0, len(neighbors))]
-	burnLevelsArr[tileToBurn.y][tileToBurn.x] += 5 * log(fireLevel)
+	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireSpreadStrength * log(fireLevel)
 
 func _physics_process(delta):
 	if timeUntilNextFireSpread <= 0:
@@ -135,16 +139,11 @@ func _process(delta):
 	for y in range(size.y):
 		for x in range(size.x):
 			var tile = tiles[y][x]
-			#if tile.fireLevel == Internal_Tile.maxFireLevel && !tile.lowParticle:
-			#	tile.lowParticle = true
-			#	fireTiles[y][x].free()
-			#	fireTiles[y][x] = makeNewLowFireInstance(Vector2(x,y))
 			if tile.fireLevel > 0:
 				if !fireTiles[y][x]:
 					fireTiles[y][x] = makeNewFireInstance(Vector2(x,y))
 				var scale = clamp((tile.fireLevel/float(Internal_Tile.maxFireLevel)) * 1.5, 0.5, 1.5 )
 				fireTiles[y][x].scale = Vector2(scale, scale)
-			
 			else:
 				if fireTiles[y][x]:
 					fireTiles[y][x].free()
@@ -153,7 +152,6 @@ func _process(delta):
 func windTimerTimeout():
 	mostForwardCol = Utils.findForwardMostFullFireColumn(tiles)
 	if mostForwardCol == -1:
-		print("no forward fire")
 		windTimer.wait_time = Utils.randInt(30, 50)
 		windTimer.start()
 		return
@@ -166,22 +164,17 @@ func windTimerTimeout():
 
 	#todo move wind
 	windEmbers.emitting = true
-	print("wind starting")
-
 	windTimer.start()
 
 
 func startWindFire():
-	windTimer.stop()
 	var newFires = Utils.randInt(1, 3)
-	var forwardDistance = Utils.randInt(10, 18)
-	print("mostfor ", mostForwardCol, "fordist ", forwardDistance)
+	var forwardDistance = Utils.randInt(10, 18) # Range of distance from mostForwardCol that fire can spawn
 	var fireTiles = []
 	for i in range(newFires):
 		fireTiles.append(Vector2(mostForwardCol + forwardDistance + Utils.randInt(0, 5), Utils.randInt(5, len(tiles) - 5)))
 	for pos in fireTiles:
-		tiles[pos.y][pos.x].fireLevel = Internal_Tile.maxFireLevel
-		print("starting new fire at " + str(pos))
+		tiles[pos.y][pos.x].fireLevel = Internal_Tile.maxFireLevel / 10
 
 	windTimer.disconnect("timeout", self, "startWindFire")
 	windTimer.connect("timeout", self, "endWindFire")
@@ -191,10 +184,8 @@ func startWindFire():
 
 func endWindFire():
 	windEmbers.emitting = false
-	print("ending wind")
 	windTimer.disconnect("timeout", self, "endWindFire")
 	windTimer.connect("timeout", self, "windTimerTimeout")
 	windTimer.wait_time = Utils.randInt(30, 50)
-	print("next wind ", windTimer.wait_time)
 	windTimer.one_shot = false
 	windTimer.start()
