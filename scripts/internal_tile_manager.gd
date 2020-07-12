@@ -140,7 +140,8 @@ func customInit():
 func incScore():
 	score += numTowns
 	print("Score = ", score)
-
+func lose():
+	pass
 func fireSpread():
 	var burnLevelsArr = [] #2d arr
 	
@@ -177,6 +178,7 @@ func setBurnLevel(burnLevelsArr, pos):
 	burnLevelsArr[tileToBurn.y][tileToBurn.x] += fireSpreadStrength * sqrt(fireLevel)
 
 func _physics_process(delta):
+	incScore()
 	if timeUntilNextFireSpread <= 0:
 		fireSpread()
 		timeUntilNextFireSpread = fireSpreadTime
@@ -200,8 +202,7 @@ func _process(delta):
 func burnTown():
 	numTowns -= 1
 	if (numTowns <= 0):
-		pass
-		#Loose()
+		lose()
 
 func windTimerTimeout():
 	mostForwardCol = Utils.findForwardMostFullFireColumn(tiles)

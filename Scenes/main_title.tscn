@@ -1,11 +1,10 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/main_level.gd" type="Script" id=1]
 [ext_resource path="res://assets/worldTiles64.tres" type="TileSet" id=2]
 [ext_resource path="res://assets/Startgame.png" type="Texture" id=3]
 [ext_resource path="res://assets/fire.png" type="Texture" id=4]
-[ext_resource path="res://Scenes/Embers.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Scenes/mainMenuEmbers.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/EmbersMainMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/water.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scripts/ButtonScripts.gd" type="Script" id=8]
 [ext_resource path="res://assets/truckRight.png" type="Texture" id=9]
@@ -155,15 +154,11 @@ __meta__ = {
 position = Vector2( 1934.24, 1079.8 )
 rotation = -0.507891
 
-[node name="Particles2D3" parent="UIRoot" instance=ExtResource( 6 )]
-position = Vector2( 1054.81, 1162.69 )
-scale = Vector2( 0.2, 0.1 )
-amount = 500
-
-[node name="Particles2D" parent="." instance=ExtResource( 5 )]
-position = Vector2( -6.34961, 815.924 )
-
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 1439.69, 1118.97 )
 texture = ExtResource( 9 )
+
+[node name="Particles2D" parent="." instance=ExtResource( 5 )]
+position = Vector2( 1113.37, 1135.82 )
+lifetime = 1.5
 [connection signal="pressed" from="UIRoot/StartGameButton" to="UIRoot/StartGameButton" method="switch_scene" binds= [ "res://Scenes/main_level.tscn" ]]

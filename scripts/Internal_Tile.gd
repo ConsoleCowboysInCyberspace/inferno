@@ -116,7 +116,7 @@ func burn(burnLevel):
 		burnDown()
 
 func burnSelf(strengthMultiplier):
-	if type == TileType.TRENCH:
+	if type != TileType.FOREST || type != TileType.FOREST:
 		return
 	fireLevel += strengthMultiplier * fireLevel
 	

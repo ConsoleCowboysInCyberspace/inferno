@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/anemometer.gd" type="Script" id=1]
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=2]
 [ext_resource path="res://assets/fire.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/menu/gameover.png" type="Texture" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -171,3 +172,18 @@ __meta__ = {
 
 [node name="Sprite" type="Sprite" parent="CenterContainer/NewFireArrow"]
 texture = ExtResource( 3 )
+
+[node name="gameover" type="Sprite" parent="."]
+position = Vector2( 497.302, 191.614 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 4 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="gameover"]
+margin_left = -163.273
+margin_top = 277.002
+margin_right = 85.7272
+margin_bottom = 317.002
+text = "You scored:"
+__meta__ = {
+"_edit_use_anchors_": false
+}

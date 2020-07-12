@@ -12,6 +12,8 @@ func _ready():
 	tile_manager.truck = truck
 	tile_manager.levelRoot = self
 	tile_manager.size = size
+	tile_manager.set_process(true)
+	tile_manager.set_physics_process(true)
 	tile_manager.customInit()
 	tile_manager.windEmbers = get_node("windEmbers")
 	

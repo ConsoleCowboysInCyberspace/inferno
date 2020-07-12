@@ -116,6 +116,7 @@ func _process(delta):
 		emit_signal("healthAmountChanged", health)
 		if health <= 0:
 			emit_signal("noHealth")
+			tile_manager.lose()
 	
 
 func _physics_process(delta):
